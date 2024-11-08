@@ -159,7 +159,7 @@ def auto_bind_light(joystick):
     input("（请不要调整其他开关的状态）")
     last_pressed_buttons_lsit = detect_joystick_buttons(joystick)  # 调用函数来检测控制器按钮状态
 
-    
+    clear_console()
     print("灯光组合绑定 (2/4)\n\n现在请你仅打开示宽灯，然后按下回车。\n")
     input("（请不要调整其他开关的状态）")
     current_pressed_buttons_list = detect_joystick_buttons(joystick)  # 调用函数来检测控制器按钮状态
@@ -167,7 +167,7 @@ def auto_bind_light(joystick):
     parkinglight_button_index_set= set(current_pressed_buttons_list) - set(last_pressed_buttons_lsit)   #与此同时打开的就是示宽灯按钮
 
 
-    
+    clear_console()
     print("灯光组合绑定 (3/4)\n\n现在请你仅打开近光灯，然后按下回车。\n")
     input("（请不要调整其他开关的状态）")
     last_pressed_buttons_lsit = current_pressed_buttons_list
@@ -175,7 +175,7 @@ def auto_bind_light(joystick):
     lowbeam_button_index_set =  set(current_pressed_buttons_list) - set(last_pressed_buttons_lsit) #刚刚打开的就是近光灯按钮
 
     
-
+    clear_console()
     print("灯光组合绑定 (4/4)\n\n现在请你仅打开远光灯，然后按下回车。\n")
     input("（请不要调整其他开关的状态）")
     last_pressed_buttons_lsit = current_pressed_buttons_list
@@ -184,7 +184,7 @@ def auto_bind_light(joystick):
     highbeam_button_index_set = set(current_pressed_buttons_list) - set(last_pressed_buttons_lsit)  #刚刚打开的就是远光灯按钮
 
 
-
+    clear_console()
     print("自动检测结果：")
     if(lightoff_button_index_set==set())or(parkinglight_button_index_set==set())or (lowbeam_button_index_set==set())or (highbeam_button_index_set==set()):
         input("检测失败，按下回车返回上级菜单。")
@@ -224,7 +224,7 @@ def auto_bind_wipers(joystick):
     input("（请不要调整其他开关的状态）")
     last_pressed_buttons_lsit = detect_joystick_buttons(joystick)  # 调用函数来检测控制器按钮状态
 
-    
+    clear_console()
     print("雨刮器组合绑定 (2/4)\n\n现在请你打开雨刮器一档，然后按下回车。\n")
     input("（请不要调整其他开关的状态）")
     current_pressed_buttons_list = detect_joystick_buttons(joystick)  # 调用函数来检测控制器按钮状态
@@ -232,7 +232,7 @@ def auto_bind_wipers(joystick):
     wipers_1_button_index_set= set(current_pressed_buttons_list) - set(last_pressed_buttons_lsit)   #与此同时打开的就是示宽灯按钮
 
 
-    
+    clear_console()
     print("雨刮器组合绑定 (3/4)\n\n现在请你打开雨刮器二档，然后按下回车。\n")
     input("（请不要调整其他开关的状态）")
     last_pressed_buttons_lsit = current_pressed_buttons_list
@@ -240,7 +240,7 @@ def auto_bind_wipers(joystick):
     wipers_2_button_index_set =  set(current_pressed_buttons_list) - set(last_pressed_buttons_lsit) #刚刚打开的就是近光灯按钮
 
     
-
+    clear_console()
     print("雨刮器组合绑定 (4/4)\n\n现在请你打开雨刮器三档，然后按下回车。\n")
     input("（请不要调整其他开关的状态）")
     last_pressed_buttons_lsit = current_pressed_buttons_list
@@ -249,7 +249,7 @@ def auto_bind_wipers(joystick):
     wipers_3_button_index_set = set(current_pressed_buttons_list) - set(last_pressed_buttons_lsit)  #刚刚打开的就是远光灯按钮
 
 
-
+    clear_console()
     print("自动检测结果：")
     if(wipers_0_button_index_set==set())or(wipers_1_button_index_set==set())or (wipers_2_button_index_set==set())or (wipers_3_button_index_set==set()):
         input("检测失败，按下回车返回上级菜单。")
@@ -284,14 +284,14 @@ def auto_bind_wipers(joystick):
 
 def manually_bind_menu(joystick):
     while(True):
-        print("=====手动绑定菜单=====\n（注意：手动绑定按钮在输入索引后立即绑定，不会重复提示确认！）\n1.绑定灯光关闭按钮\n2.绑定示宽灯按钮\n3.绑定近光灯按钮\n4.绑定远光灯按钮")
-        print("5.绑定灯光喇叭按钮\n6.绑定雨刮关闭按钮\n7.绑定雨刮一档按钮\n8.绑定雨刮二挡按钮\n9.绑定雨刮三挡按钮\n10.绑定左转向灯按钮")
-        print("11.绑定右转向灯按钮\n0.返回主菜单")
+        print("=====手动绑定菜单=====\n（注意：手动绑定开关在输入索引后立即绑定，不会重复提示确认！）\n1.绑定灯光关闭开关\n2.绑定示宽灯开关\n3.绑定近光灯开关\n4.绑定远光灯开关")
+        print("5.绑定灯光喇叭开关\n6.绑定雨刮关闭开关\n7.绑定雨刮一档开关\n8.绑定雨刮二挡开关\n9.绑定雨刮三挡开关\n10.绑定左转向灯开关")
+        print("11.绑定右转向灯开关\n0.返回主菜单")
         print("=====================")
         selection = input("请输入选择：\n")
         clear_console()
         if selection == "1":
-            button_index = input("绑定灯光关闭按钮\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
+            button_index = input("绑定灯光关闭开关\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
             if(button_index==""):
                 pass
             elif not button_index.isdigit():
@@ -303,7 +303,7 @@ def manually_bind_menu(joystick):
                 bind_button(BindingType.lightoff,int(button_index)+1)       # 配置文件是1基索引，因此+1
                 pass
         elif selection == "2":
-            button_index = input("绑定示宽灯按钮\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
+            button_index = input("绑定示宽灯开关\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
             if(button_index==""):
                 pass
             elif not button_index.isdigit():
@@ -315,7 +315,7 @@ def manually_bind_menu(joystick):
                 bind_button(BindingType.lightpark,int(button_index)+1)
                 pass
         elif selection == "3":
-            button_index = input("绑定近光灯按钮\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
+            button_index = input("绑定近光灯开关\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
             if(button_index==""):
                 pass
             elif not button_index.isdigit():
@@ -327,7 +327,7 @@ def manually_bind_menu(joystick):
                 bind_button(BindingType.lighton,int(button_index)+1)
                 pass
         elif selection == "4":
-            button_index = input("绑定远光灯按钮\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
+            button_index = input("绑定远光灯开关\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
             if(button_index==""):
                 pass
             elif not button_index.isdigit():
@@ -339,7 +339,7 @@ def manually_bind_menu(joystick):
                 bind_button(BindingType.hblight,int(button_index)+1)
                 pass
         elif selection == "5":
-            button_index = input("绑定灯光喇叭按钮\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
+            button_index = input("绑定灯光喇叭开关\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
             if(button_index==""):
                 pass
             elif not button_index.isdigit():
@@ -351,7 +351,7 @@ def manually_bind_menu(joystick):
                 bind_button(BindingType.lighthorn,int(button_index)+1)
                 pass
         elif selection == "6":
-            button_index = input("绑定雨刮器关闭按钮\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
+            button_index = input("绑定雨刮器关闭开关\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
             if(button_index==""):
                 pass
             elif not button_index.isdigit():
@@ -363,7 +363,7 @@ def manually_bind_menu(joystick):
                 bind_button(BindingType.wipers0,int(button_index)+1)
                 pass
         elif selection == "7":
-            button_index = input("绑定雨刮器一档按钮\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
+            button_index = input("绑定雨刮器一档开关\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
             if(button_index==""):
                 pass
             elif not button_index.isdigit():
@@ -375,7 +375,7 @@ def manually_bind_menu(joystick):
                 bind_button(BindingType.wipers1,int(button_index)+1)
                 pass
         elif selection == "8":
-            button_index = input("绑定雨刮器二档按钮\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
+            button_index = input("绑定雨刮器二档开关\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
             if(button_index==""):
                 pass
             elif not button_index.isdigit():
@@ -387,7 +387,7 @@ def manually_bind_menu(joystick):
                 bind_button(BindingType.wipers2,int(button_index)+1)
                 pass
         elif selection == "9":
-            button_index = input("绑定雨刮器三挡按钮\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
+            button_index = input("绑定雨刮器三挡开关\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
             if(button_index==""):
                 pass
             elif not button_index.isdigit():
@@ -399,7 +399,7 @@ def manually_bind_menu(joystick):
                 bind_button(BindingType.wipers3,int(button_index)+1)
                 pass
         elif selection == "10":
-            button_index = input("绑定左转向灯按钮\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
+            button_index = input("绑定左转向灯开关\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
             if(button_index==""):
                 pass
             elif not button_index.isdigit():
@@ -411,7 +411,7 @@ def manually_bind_menu(joystick):
                 bind_button(BindingType.lblinkerh,int(button_index)+1)
                 pass
         elif selection == "11":
-            button_index = input("绑定右转向灯按钮\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
+            button_index = input("绑定右转向灯开关\n如需取消，请不要输入任何内容然后按下回车。\n请输入按钮索引数值（0~65535）：")
             if(button_index==""):
                 pass
             elif not button_index.isdigit():
@@ -429,14 +429,6 @@ def manually_bind_menu(joystick):
             print("无效输入！")
             time.sleep(2)  # 等待2秒后重新显示菜单
 
-
-        
-        
-
-    
-
-
-
 def auto_bind_left_blinker(joystick):
     last_pressed_buttons_lsit=[]
     current_pressed_buttons_list=[]
@@ -451,6 +443,7 @@ def auto_bind_left_blinker(joystick):
     input("（请不要调整其他开关的状态）")
     current_pressed_buttons_list = detect_joystick_buttons(joystick)  # 调用函数来检测控制器按钮状态
     lblink_index_set =set(last_pressed_buttons_lsit) - set(current_pressed_buttons_list)
+    clear_console()
     print("自动检测结果：")
     if(lblink_index_set ==set()):
         input("检测失败，按下回车返回上级菜单。")
@@ -483,6 +476,7 @@ def auto_bind_right_blinker(joystick):
     input("（请不要调整其他开关的状态）")
     current_pressed_buttons_list = detect_joystick_buttons(joystick)  # 调用函数来检测控制器按钮状态
     rblink_index_set =set(last_pressed_buttons_lsit) - set(current_pressed_buttons_list)
+    clear_console()
     print("自动检测结果：")
     if(rblink_index_set ==set()):
         input("检测失败，按下回车返回上级菜单。")
@@ -555,23 +549,24 @@ def select_user_profile():
     print("\n请选择一个配置文件:")
     for idx, (folder_name, mod_time) in enumerate(all_folders, start=1):
         print(f"{idx}. {folder_name} (最后修改时间: {mod_time})")
-    
+    while(True):
     # 获取用户的选择
-    try:
-        choice = int(input(f"请输入配置文件编号 (1-{len(all_folders)}): "))
-        if 1 <= choice <= len(all_folders):
-            selected_folder = all_folders[choice - 1][0]
-            print(f"已选择的配置文件: {selected_folder}")
-            if choice <= len(steam_folders):
-                seleceted_profile = steam_profiles / selected_folder / "controls.sii"
+        try:
+            choice = int(input(f"请输入配置文件编号 (1-{len(all_folders)}): "))
+            if 1 <= choice <= len(all_folders):
+                selected_folder = all_folders[choice - 1][0]
+                print(f"已选择的配置文件: {selected_folder}")
+                if choice <= len(steam_folders):
+                    seleceted_profile = steam_profiles / selected_folder / "controls.sii"
+                else:
+                    seleceted_profile = profiles / selected_folder / "controls.sii"
+                print(f"配置文件完整路径：{seleceted_profile}")
+                backup_file(seleceted_profile)
+                return
             else:
-                seleceted_profile = profiles / selected_folder / "controls.sii"
-            print(f"配置文件完整路径：{seleceted_profile}")
-            backup_file(seleceted_profile)
-        else:
-            print("无效的选择!")
-    except ValueError:
-        print("请输入一个有效的数字！")
+                print("无效的选择!")
+        except ValueError:
+            print("请输入一个有效的数字！")
 
 def select_joystick():
     # 初始化Pygame
@@ -598,6 +593,7 @@ def select_joystick():
         selected_index = int(input("请选择一个控制器 (输入数字): ")) - 1
         if selected_index < 0 or selected_index >= joystick_count:
             print("选择无效")
+            time.sleep(1)
             return None  # 返回 None 表示选择无效
         else:
             selected_joystick = joystick_list[selected_index]
@@ -609,6 +605,7 @@ def select_joystick():
             return joystick
     except ValueError:
         print("请输入有效的数字")
+        time.sleep(1)
         return None  # 如果输入无效，返回 None
 
 def select_ets2_joystick():
