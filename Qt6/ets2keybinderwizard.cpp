@@ -96,8 +96,6 @@ ETS2KeyBinderWizard::ETS2KeyBinderWizard(QWidget* parent) : QWizard(parent), ui(
                 qDebug() << "打开设备失败！";
                 return;
             }
-            // 备份配置文件
-            backupProfile();
         }
     });
 }
@@ -496,9 +494,10 @@ void ETS2KeyBinderWizard::on_pushButton_clicked() {
     // 4、确定是否绑定
     box.setWindowTitle("示廓灯&近光灯");
     box.setText("是否绑定？");
-
     int ret = box.exec();
     if (ret == QMessageBox::Yes) {
+        backupProfile(); // 备份配置文件
+
         // config_lines[395]: "mix lightoff `!joy3.b10?0 | semantical.lightoff?0`"
         // config_lines[396]: "mix lightpark `joy3.b10?0 & !joy3.b11?0 | semantical.lightpark?0`"
         // config_lines[397]: "mix lighton `joy3.b10?0 & joy3.b11?0 | semantical.lighton?0`"
@@ -654,6 +653,8 @@ void ETS2KeyBinderWizard::on_pushButton_3_clicked() {
     box.setText("是否绑定？");
     int ret = box.exec();
     if (ret == QMessageBox::Yes) {
+        backupProfile(); // 备份配置文件
+
         // config_lines[400]: "mix lblinkerh `joy3.b6?0 | semantical.lblinkerh?0`"
         // config_lines[402]: "mix rblinkerh `joy3.b7?0 | semantical.rblinkerh?0`"
         int gameJoyPosIndex = ui->comboBox_2->currentIndex();
@@ -733,10 +734,10 @@ void ETS2KeyBinderWizard::on_pushButton_4_clicked() {
     // 5、确定是否绑定
     box.setWindowTitle("雨刮器 绑定");
     box.setText("是否绑定？");
-    box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    box.setDefaultButton(QMessageBox::Yes);
     int ret = box.exec();
     if (ret == QMessageBox::Yes) {
+        backupProfile(); // 备份配置文件
+
         // config_lines[383]: "mix wipers0 `!joy3.b1?0 & !joy3.b2?0 & !joy3.b3?0 | semantical.wipers0?0`"
         // config_lines[384]: "mix wipers1 `joy3.b1?0 | semantical.wipers1?0`"
         // config_lines[385]: "mix wipers2 `joy3.b2?0 | semantical.wipers2?0`"
