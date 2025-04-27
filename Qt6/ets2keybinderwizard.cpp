@@ -10,7 +10,6 @@
 
 // 参考开源项目：https://github.com/Sab1e-GitHub/ETS2-KeyBinder
 
-const QString LOG_HEADER = "<b>特殊按键绑定</b> - ";
 const QString MEG_BOX_LINE = "------------------------";
 const QString MAPPING_FILE_NAME = "LightBinder";
 
