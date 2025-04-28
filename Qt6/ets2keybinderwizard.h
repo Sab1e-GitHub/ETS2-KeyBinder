@@ -39,6 +39,12 @@ private slots:
 
     void on_comboBox_2_activated(int index);
 
+    void on_checkBox_2_clicked(bool checked);
+
+    void on_checkBox_3_clicked(bool checked);
+
+    void on_checkBox_4_clicked(bool checked);
+
 private:
     Ui::ETS2KeyBinderWizard* ui;
 

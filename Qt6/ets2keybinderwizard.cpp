@@ -800,3 +800,25 @@ void ETS2KeyBinderWizard::on_comboBox_3_activated(int index) {
 void ETS2KeyBinderWizard::on_comboBox_2_activated(int index) {
     gameDeviceName = ui->comboBox_2->currentText().toStdString();
 }
+
+void ETS2KeyBinderWizard::on_checkBox_2_clicked(bool checked) {
+    ui->checkBox_4->setChecked(!checked);
+    if (checked) {
+        ui->checkBox_3->setChecked(true);
+        ui->checkBox_3->setEnabled(false);
+        ui->stackedWidget->setCurrentIndex(1); // 显示单按键绑定界面
+    } else {
+        ui->checkBox_3->setEnabled(true);
+    }
+}
+
+void ETS2KeyBinderWizard::on_checkBox_3_clicked(bool checked) {
+    ui->stackedWidget->setCurrentIndex(checked);
+}
+
+void ETS2KeyBinderWizard::on_checkBox_4_clicked(bool checked)
+{
+    ui->checkBox_2->setChecked(!checked);
+    on_checkBox_2_clicked(!checked);
+}
+
