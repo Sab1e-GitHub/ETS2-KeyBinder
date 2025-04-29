@@ -42,8 +42,7 @@ void ManuallyBinder::setKeyCount(size_t count) {
 void ManuallyBinder::on_pushButton_2_clicked() {
     ui->lineEdit->clear(); // 清空文本框
 
-    actionEffect.affectedKeys.clear(); // 清空受影响的按键
-    actionEffect.state.clear();        // 清空对应的新状态
+    actionEffect.clear(); // 清空受影响的按键
 
     setKeyCount(keyCount); // 重新设置按键数量
 }
@@ -65,8 +64,7 @@ void ManuallyBinder::on_pushButton_clicked() {
         return;
     }
 
-    actionEffect.affectedKeys.push_back(keyIndex);                 // 添加按键索引
-    actionEffect.state.push_back(!ui->comboBox_3->currentIndex()); // 添加按键状态
+    actionEffect.insert_or_assign(keyIndex, !ui->comboBox_3->currentIndex()); // 添加按键索引和状态
 
     QString keyName = "\"按键" + QString::number(keyIndex + 1) + " " + ui->comboBox_3->currentText() + "\""; // 按键名称
     if (ui->lineEdit->text().isEmpty()) {

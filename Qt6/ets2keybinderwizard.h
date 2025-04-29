@@ -25,10 +25,7 @@ enum class BindingType
     wipers3,   // 雨刷器3档
 };
 
-struct ActionEffect {
-    std::vector<int> affectedKeys; // 受影响的按键位置
-    std::vector<bool> state;       // 对应的新状态（true为按下，false为释放）
-};
+typedef std::map<int, bool> ActionEffect; // 受影响的按键位置和对应的新状态
 
 namespace Ui {
 class ETS2KeyBinderWizard;

@@ -808,15 +808,15 @@ void ETS2KeyBinderWizard::on_pushButton_16_clicked() {
 }
 
 void ETS2KeyBinderWizard::modifyControlsSii_Slot(BindingType bindingType, ActionEffect actionEffect) {
-    if (actionEffect.affectedKeys.empty()) {
+    if (actionEffect.empty()) {
         qDebug() << "没有受影响的按键！";
         return;
     }
 
     QString ets2BtnStr;
-    for (size_t i = 0; i < actionEffect.affectedKeys.size(); i++) {
-        int keyIndex = actionEffect.affectedKeys[i];
-        if (actionEffect.state[i] == false) {
+    for (const auto& action : actionEffect) {
+        int keyIndex = action.first; // 获取按键索引
+        if (action.second == false) {
             ets2BtnStr += "!";
         }
         ets2BtnStr += gameJoyPosNameList[ui->comboBox_2->currentIndex()].trimmed() + ".b" + QString::number(keyIndex + 1) + " & "; // 1基索引
