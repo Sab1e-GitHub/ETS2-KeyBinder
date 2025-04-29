@@ -3,7 +3,6 @@
 #include <QMessageBox>
 #include <map>
 
-
 using namespace std;
 
 ManuallyBinder::ManuallyBinder(QWidget* parent) : QDialog(parent), ui(new Ui::ManuallyBinder) {
@@ -92,8 +91,13 @@ void ManuallyBinder::on_pushButton_3_clicked() {
     int ret = box.exec();
     if (ret == QMessageBox::Yes) {
         emit keyBound(static_cast<BindingType>(ui->comboBox->currentIndex()), actionEffect); // 发送信号
-        close(); // 关闭窗口
+        close();                                                                             // 关闭窗口
     } else {
         return; // 取消操作
     }
+}
+
+// 取消按钮
+void ManuallyBinder::on_pushButton_4_clicked() {
+    close(); // 关闭窗口
 }
