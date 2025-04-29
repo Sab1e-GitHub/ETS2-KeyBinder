@@ -12,18 +12,21 @@ SOURCES += \
     ets2keybinderwizard.cpp \
     global.cpp \
     main.cpp \
-    manuallybinder.cpp
+    manuallybinder.cpp \
+    showkeystate.cpp
 
 
 HEADERS += \
     device_info.h \
     ets2keybinderwizard.h \
     global.h \
-    manuallybinder.h
+    manuallybinder.h \
+    showkeystate.h
 
 FORMS += \
     ets2keybinderwizard.ui \
-    manuallybinder.ui
+    manuallybinder.ui \
+    showkeystate.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QTimer>
 #include <map>
 #include <string>
 
@@ -79,6 +80,47 @@ ETS2KeyBinderWizard::ETS2KeyBinderWizard(QWidget* parent) : QWizard(parent), ui(
             if (!openDiDevice(ui->comboBox->currentIndex(), reinterpret_cast<HWND>(this->winId()))) {
                 qDebug() << "打开设备失败！";
                 return;
+            }
+
+            if (showKeyState == nullptr) {
+                showKeyState = new ShowKeyState();
+                showKeyState->setWindowTitle("按键状态");
+                // 设置坐标为主窗口的左边
+                showKeyState->setGeometry(this->geometry().x() - 100, this->geometry().y(), 200, 200);
+                showKeyState->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Dialog | Qt::WindowCloseButtonHint); // 设置窗口为置顶
+                showKeyState->setKeyCount(capabilities.dwButtons);                                               // 设置按键数量
+                showKeyState->setAttribute(Qt::WA_DeleteOnClose);                                                // 关闭时删除窗口对象
+                showKeyState->show();                                                                            // 显示按键状态窗口
+
+                connect(showKeyState, &ShowKeyState::destroyed, this, [=]() {
+                    if (timer) {
+                        timer->stop(); // 停止定时器
+                        delete timer;  // 删除定时器对象
+                        timer = nullptr;
+                    }
+                });
+
+                // 设置主窗口关闭时，按键状态窗口也关闭
+                connect(this, &QWizard::finished, this, [=]() {
+                    if (showKeyState) {
+                        showKeyState->close(); // 关闭按键状态窗口
+                    }
+                });
+
+            } else {
+                showKeyState->setKeyCount(capabilities.dwButtons); // 设置按键数量
+                showKeyState->show();                              // 显示按键状态窗口
+            }
+
+            if (timer == nullptr) {
+                timer = new QTimer(this);
+                connect(timer, &QTimer::timeout, this, [=]() {
+                    if (pDevice && showKeyState) {
+                        BigKey keyState = getKeyState();     // 获取按键状态
+                        showKeyState->setKeyState(keyState); // 更新按键状态窗口
+                    }
+                });
+                timer->start(100); // 每100毫秒更新一次
             }
         }
     });
@@ -823,6 +865,7 @@ void ETS2KeyBinderWizard::modifyControlsSii_Slot(BindingType bindingType, Action
     }
     ets2BtnStr.chop(3); // 去掉最后的 " & "
 
+    qDebug() << "修改的按键:" << ets2BtnStr;
     backupProfile(); // 备份配置文件
     modifyControlsSii(selectedProfilePath, bindingType, ets2BtnStr);
 }

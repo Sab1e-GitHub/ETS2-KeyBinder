@@ -3,6 +3,7 @@
 
 #include "BigKey.hpp"
 #include "global.h"
+#include "showkeystate.h"
 #include <QDir>
 #include <QWizard>
 #include <dinput.h>
@@ -39,6 +40,9 @@ public:
     ~ETS2KeyBinderWizard();
 
     QStringList getDeviceNameGameList();
+
+signals:
+    void keyStateUpdate_Signal(BigKey& keyState); // 更新按键状态信号
 
 public slots:
     void modifyControlsSii_Slot(BindingType bindingType, ActionEffect actionEffect);
@@ -85,6 +89,9 @@ private:
     LPDIRECTINPUTDEVICE8 pDevice = NULL;
     int lastDeviceIndex = -99;
     DIDEVCAPS capabilities;
+
+    ShowKeyState* showKeyState = nullptr; // 显示按键状态窗口
+    QTimer* timer = nullptr;              // 定时器
 
     BigKey getKeyState();
 
