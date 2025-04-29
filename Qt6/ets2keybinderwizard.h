@@ -9,6 +9,26 @@
 #include <string.h>
 #include <windows.h>
 
+// 枚举类型定义
+enum class BindingType
+{
+    lightoff,  // 关闭灯光
+    lightpark, // 示廓灯
+    lighton,   // 近光灯
+    lblinkerh, // 左转向灯
+    rblinkerh, // 右转向灯
+    hblight,   // 远光灯
+    lighthorn, // 灯光喇叭
+    wipers0,   // 雨刷器关闭
+    wipers1,   // 雨刷器1档
+    wipers2,   // 雨刷器2档
+    wipers3,   // 雨刷器3档
+};
+
+struct ActionEffect {
+    std::vector<int> affectedKeys; // 受影响的按键位置
+    std::vector<bool> state;       // 对应的新状态（true为按下，false为释放）
+};
 
 namespace Ui {
 class ETS2KeyBinderWizard;
@@ -39,11 +59,9 @@ private slots:
 
     void on_comboBox_2_activated(int index);
 
-    void on_checkBox_2_clicked(bool checked);
-
     void on_checkBox_3_clicked(bool checked);
 
-    void on_checkBox_4_clicked(bool checked);
+    void on_pushButton_16_clicked();
 
 private:
     Ui::ETS2KeyBinderWizard* ui;

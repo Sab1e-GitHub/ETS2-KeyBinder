@@ -1,11 +1,11 @@
 #include "ets2keybinderwizard.h"
+#include "manuallybinder.h"
 #include "ui_ets2keybinderwizard.h"
 #include <QDateTime>
 #include <QDebug>
 #include <QFileInfo>
 #include <QMessageBox>
 #include <map>
-#include <regex>
 #include <string>
 
 // 参考开源项目：https://github.com/Sab1e-GitHub/ETS2-KeyBinder
@@ -18,22 +18,6 @@ using namespace std;
 // 欧卡2 设置    “摇杆 Button0” 0基索引
 // 欧卡2 配置文件 “joy.b1”      1基索引
 // pygame Button_Index         0基索引
-
-// 枚举类型定义
-enum class BindingType
-{
-    lightoff,  // 关闭灯光
-    lighthorn, // 灯光喇叭
-    wipers0,   // 雨刷器关闭
-    wipers1,   // 雨刷器1档
-    wipers2,   // 雨刷器2档
-    wipers3,   // 雨刷器3档
-    lightpark, // 示廓灯
-    lighton,   // 近光灯
-    hblight,   // 远光灯
-    lblinkerh, // 左转向灯
-    rblinkerh  // 右转向灯
-};
 
 ETS2KeyBinderWizard::ETS2KeyBinderWizard(QWidget* parent) : QWizard(parent), ui(new Ui::ETS2KeyBinderWizard) {
     ui->setupUi(this);
@@ -801,24 +785,22 @@ void ETS2KeyBinderWizard::on_comboBox_2_activated(int index) {
     gameDeviceName = ui->comboBox_2->currentText().toStdString();
 }
 
-void ETS2KeyBinderWizard::on_checkBox_2_clicked(bool checked) {
-    ui->checkBox_4->setChecked(!checked);
-    if (checked) {
-        ui->checkBox_3->setChecked(true);
-        ui->checkBox_3->setEnabled(false);
-        ui->stackedWidget->setCurrentIndex(1); // 显示单按键绑定界面
-    } else {
-        ui->checkBox_3->setEnabled(true);
-    }
-}
-
 void ETS2KeyBinderWizard::on_checkBox_3_clicked(bool checked) {
     ui->stackedWidget->setCurrentIndex(checked);
 }
 
-void ETS2KeyBinderWizard::on_checkBox_4_clicked(bool checked)
-{
-    ui->checkBox_2->setChecked(!checked);
-    on_checkBox_2_clicked(!checked);
-}
+// 手动绑定
+void ETS2KeyBinderWizard::on_pushButton_16_clicked() {
+    ManuallyBinder* manuallyBinder = new ManuallyBinder(this);
+    manuallyBinder->setAttribute(Qt::WA_DeleteOnClose); // 关闭时自动删除
+    // 当manuallyBinder没关闭时，不允许操作其他窗口
+    manuallyBinder->setWindowModality(Qt::ApplicationModal); // 设置窗口模式为应用程序模态
 
+    if (pDirectInput != nullptr) {
+        manuallyBinder->setKeyCount(capabilities.dwButtons); // 设置按键数量
+    } else {
+        manuallyBinder->setKeyCount(128); // 设置按键数量
+    }
+
+    manuallyBinder->show();
+}
