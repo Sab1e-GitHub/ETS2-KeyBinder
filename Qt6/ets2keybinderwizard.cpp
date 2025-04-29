@@ -98,6 +98,7 @@ ETS2KeyBinderWizard::ETS2KeyBinderWizard(QWidget* parent) : QWizard(parent), ui(
                         delete timer;  // 删除定时器对象
                         timer = nullptr;
                     }
+                    showKeyState = nullptr; // 释放指针
                 });
 
                 // 设置主窗口关闭时，按键状态窗口也关闭
