@@ -486,17 +486,17 @@ void ETS2KeyBinderWizard::on_pushButton_clicked() {
         // config_lines[396]: "mix lightpark `joy3.b10?0 & !joy3.b11?0 | semantical.lightpark?0`"
         // config_lines[397]: "mix lighton `joy3.b10?0 & joy3.b11?0 | semantical.lighton?0`"
         int gameJoyPosIndex = ui->comboBox_2->currentIndex();
-        QString ets2BtnStr = "!" + gameJoyPosNameList[gameJoyPosIndex] + ".b" + QString::number(diffKey1Index[0] + 1) + "?0";
+        QString ets2BtnStr = "!" + gameJoyPosNameList[gameJoyPosIndex].trimmed() + ".b" + QString::number(diffKey1Index[0] + 1) + "?0";
         modifyControlsSii(selectedProfilePath, BindingType::lightoff, ets2BtnStr);
-        ets2BtnStr = gameJoyPosNameList[gameJoyPosIndex] + ".b" + QString::number(diffKey1Index[0] + 1) + "?0";
+        ets2BtnStr = gameJoyPosNameList[gameJoyPosIndex].trimmed() + ".b" + QString::number(diffKey1Index[0] + 1) + "?0";
         if (diffKey2Index.size() > 1) {
-            ets2BtnStr += " & !" + gameJoyPosNameList[gameJoyPosIndex] + ".b"
+            ets2BtnStr += " & !" + gameJoyPosNameList[gameJoyPosIndex].trimmed() + ".b"
                           + QString::number((diffKey2Index[0] == diffKey1Index[0] ? diffKey2Index[1] : diffKey2Index[0]) + 1) + "?0";
         }
         modifyControlsSii(selectedProfilePath, BindingType::lightpark, ets2BtnStr);
-        ets2BtnStr = gameJoyPosNameList[gameJoyPosIndex] + ".b" + QString::number(diffKey1Index[0] + 1) + "?0";
+        ets2BtnStr = gameJoyPosNameList[gameJoyPosIndex].trimmed() + ".b" + QString::number(diffKey1Index[0] + 1) + "?0";
         if (diffKey2Index.size() > 1) {
-            ets2BtnStr += " & " + gameJoyPosNameList[gameJoyPosIndex] + ".b" + QString::number(diffKey2Index[1] + 1) + "?0";
+            ets2BtnStr += " & " + gameJoyPosNameList[gameJoyPosIndex].trimmed() + ".b" + QString::number(diffKey2Index[1] + 1) + "?0";
         }
         modifyControlsSii(selectedProfilePath, BindingType::lighton, ets2BtnStr);
     }
@@ -642,9 +642,9 @@ void ETS2KeyBinderWizard::on_pushButton_3_clicked() {
         // config_lines[400]: "mix lblinkerh `joy3.b6?0 | semantical.lblinkerh?0`"
         // config_lines[402]: "mix rblinkerh `joy3.b7?0 | semantical.rblinkerh?0`"
         int gameJoyPosIndex = ui->comboBox_2->currentIndex();
-        QString ets2BtnStr = gameJoyPosNameList[gameJoyPosIndex] + ".b" + QString::number(diffKey1Index + 1) + "?0";
+        QString ets2BtnStr = gameJoyPosNameList[gameJoyPosIndex].trimmed() + ".b" + QString::number(diffKey1Index + 1) + "?0";
         modifyControlsSii(selectedProfilePath, BindingType::lblinkerh, ets2BtnStr);
-        ets2BtnStr = gameJoyPosNameList[gameJoyPosIndex] + ".b" + QString::number(diffKey2Index + 1) + "?0";
+        ets2BtnStr = gameJoyPosNameList[gameJoyPosIndex].trimmed() + ".b" + QString::number(diffKey2Index + 1) + "?0";
         modifyControlsSii(selectedProfilePath, BindingType::rblinkerh, ets2BtnStr);
     }
 }
@@ -727,15 +727,15 @@ void ETS2KeyBinderWizard::on_pushButton_4_clicked() {
         // config_lines[385]: "mix wipers2 `joy3.b2?0 | semantical.wipers2?0`"
         // config_lines[386]: "mix wipers3 `joy3.b3?0 | semantical.wipers3?0`"
         int gameJoyPosIndex = ui->comboBox_2->currentIndex();
-        QString ets2BtnStr = "!" + gameJoyPosNameList[gameJoyPosIndex] + ".b" + QString::number(diffKey1Index + 1) + "?0 & !"
-                             + gameJoyPosNameList[gameJoyPosIndex] + ".b" + QString::number(diffKey2Index + 1) + "?0 & !"
-                             + gameJoyPosNameList[gameJoyPosIndex] + ".b" + QString::number(diffKey3Index + 1) + "?0";
+        QString ets2BtnStr = "!" + gameJoyPosNameList[gameJoyPosIndex].trimmed() + ".b" + QString::number(diffKey1Index + 1) + "?0 & !"
+                             + gameJoyPosNameList[gameJoyPosIndex].trimmed() + ".b" + QString::number(diffKey2Index + 1) + "?0 & !"
+                             + gameJoyPosNameList[gameJoyPosIndex].trimmed() + ".b" + QString::number(diffKey3Index + 1) + "?0";
         modifyControlsSii(selectedProfilePath, BindingType::wipers0, ets2BtnStr);
-        ets2BtnStr = gameJoyPosNameList[gameJoyPosIndex] + ".b" + QString::number(diffKey1Index + 1) + "?0";
+        ets2BtnStr = gameJoyPosNameList[gameJoyPosIndex].trimmed() + ".b" + QString::number(diffKey1Index + 1) + "?0";
         modifyControlsSii(selectedProfilePath, BindingType::wipers1, ets2BtnStr);
-        ets2BtnStr = gameJoyPosNameList[gameJoyPosIndex] + ".b" + QString::number(diffKey2Index + 1) + "?0";
+        ets2BtnStr = gameJoyPosNameList[gameJoyPosIndex].trimmed() + ".b" + QString::number(diffKey2Index + 1) + "?0";
         modifyControlsSii(selectedProfilePath, BindingType::wipers2, ets2BtnStr);
-        ets2BtnStr = gameJoyPosNameList[gameJoyPosIndex] + ".b" + QString::number(diffKey3Index + 1) + "?0";
+        ets2BtnStr = gameJoyPosNameList[gameJoyPosIndex].trimmed() + ".b" + QString::number(diffKey3Index + 1) + "?0";
         modifyControlsSii(selectedProfilePath, BindingType::wipers3, ets2BtnStr);
     }
 }
@@ -819,9 +819,9 @@ void ETS2KeyBinderWizard::modifyControlsSii_Slot(BindingType bindingType, Action
         if (actionEffect.state[i] == false) {
             ets2BtnStr += "!";
         }
-        ets2BtnStr += gameJoyPosNameList[ui->comboBox_2->currentIndex()] + ".b" + QString::number(keyIndex + 1) + " & "; // 1基索引
+        ets2BtnStr += gameJoyPosNameList[ui->comboBox_2->currentIndex()].trimmed() + ".b" + QString::number(keyIndex + 1) + " & "; // 1基索引
     }
-    ets2BtnStr.chop(1); // 去掉最后一个&
+    ets2BtnStr.chop(3); // 去掉最后的 " & "
     qDebug() << "修改后的按键字符串:" << ets2BtnStr;
     modifyControlsSii(selectedProfilePath, bindingType, ets2BtnStr);
 }
