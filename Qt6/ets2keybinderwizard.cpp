@@ -822,6 +822,7 @@ void ETS2KeyBinderWizard::modifyControlsSii_Slot(BindingType bindingType, Action
         ets2BtnStr += gameJoyPosNameList[ui->comboBox_2->currentIndex()].trimmed() + ".b" + QString::number(keyIndex + 1) + " & "; // 1基索引
     }
     ets2BtnStr.chop(3); // 去掉最后的 " & "
-    qDebug() << "修改后的按键字符串:" << ets2BtnStr;
+
+    backupProfile(); // 备份配置文件
     modifyControlsSii(selectedProfilePath, bindingType, ets2BtnStr);
 }
