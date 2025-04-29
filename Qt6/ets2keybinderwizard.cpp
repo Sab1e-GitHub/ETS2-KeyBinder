@@ -802,5 +802,26 @@ void ETS2KeyBinderWizard::on_pushButton_16_clicked() {
         manuallyBinder->setKeyCount(128); // 设置按键数量
     }
 
+    // 连接信号槽
+    connect(manuallyBinder, &ManuallyBinder::keyBound, this, &ETS2KeyBinderWizard::modifyControlsSii_Slot, Qt::DirectConnection);
     manuallyBinder->show();
+}
+
+void ETS2KeyBinderWizard::modifyControlsSii_Slot(BindingType bindingType, ActionEffect actionEffect) {
+    if (actionEffect.affectedKeys.empty()) {
+        qDebug() << "没有受影响的按键！";
+        return;
+    }
+
+    QString ets2BtnStr;
+    for (size_t i = 0; i < actionEffect.affectedKeys.size(); i++) {
+        int keyIndex = actionEffect.affectedKeys[i];
+        if (actionEffect.state[i] == false) {
+            ets2BtnStr += "!";
+        }
+        ets2BtnStr += gameJoyPosNameList[ui->comboBox_2->currentIndex()] + ".b" + QString::number(keyIndex + 1) + " & "; // 1基索引
+    }
+    ets2BtnStr.chop(1); // 去掉最后一个&
+    qDebug() << "修改后的按键字符串:" << ets2BtnStr;
+    modifyControlsSii(selectedProfilePath, bindingType, ets2BtnStr);
 }

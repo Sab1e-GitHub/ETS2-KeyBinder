@@ -43,6 +43,9 @@ public:
 
     QStringList getDeviceNameGameList();
 
+public slots:
+    void modifyControlsSii_Slot(BindingType bindingType, ActionEffect actionEffect);
+
 private slots:
 
     void on_comboBox_activated(int index);

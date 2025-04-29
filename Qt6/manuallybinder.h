@@ -4,7 +4,6 @@
 #include "ets2keybinderwizard.h"
 #include <QDialog>
 
-
 namespace Ui {
 class ManuallyBinder;
 }
@@ -17,10 +16,15 @@ public:
     ~ManuallyBinder();
     void setKeyCount(size_t count);
 
+signals:
+    void keyBound(BindingType bindingType, ActionEffect actionEffect);
+
 private slots:
     void on_pushButton_2_clicked();
 
     void on_pushButton_clicked();
+
+    void on_pushButton_3_clicked();
 
 private:
     Ui::ManuallyBinder* ui;

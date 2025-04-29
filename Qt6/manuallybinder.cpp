@@ -1,6 +1,8 @@
 #include "manuallybinder.h"
 #include "ui_manuallybinder.h"
+#include <QMessageBox>
 #include <map>
+
 
 using namespace std;
 
@@ -80,5 +82,18 @@ void ManuallyBinder::on_pushButton_clicked() {
         ui->comboBox_2->removeItem(index); // 移除下拉框中的按键
     } else {
         qDebug() << "未找到按键" << keyIndex + 1 << "在下拉框中";
+    }
+}
+
+void ManuallyBinder::on_pushButton_3_clicked() {
+    QMessageBox box(QMessageBox::Information, "提示", "是否绑定？");
+    box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    box.setDefaultButton(QMessageBox::Yes);
+    int ret = box.exec();
+    if (ret == QMessageBox::Yes) {
+        emit keyBound(static_cast<BindingType>(ui->comboBox->currentIndex()), actionEffect); // 发送信号
+        close(); // 关闭窗口
+    } else {
+        return; // 取消操作
     }
 }
