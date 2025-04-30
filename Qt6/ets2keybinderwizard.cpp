@@ -522,7 +522,7 @@ void ETS2KeyBinderWizard::on_pushButton_clicked() {
     box.setWindowTitle("示廓灯&近光灯");
     box.setText("是否绑定？");
     int ret = box.exec();
-    if (ret == QMessageBox::Yes) {
+    if (ret == QMessageBox::Ok) {
         backupProfile(); // 备份配置文件
 
         // config_lines[395]: "mix lightoff `!joy3.b10?0 | semantical.lightoff?0`"
@@ -679,7 +679,7 @@ void ETS2KeyBinderWizard::on_pushButton_3_clicked() {
     box.setWindowTitle("左转向灯&右转向灯");
     box.setText("是否绑定？");
     int ret = box.exec();
-    if (ret == QMessageBox::Yes) {
+    if (ret == QMessageBox::Ok) {
         backupProfile(); // 备份配置文件
 
         // config_lines[400]: "mix lblinkerh `joy3.b6?0 | semantical.lblinkerh?0`"
@@ -762,7 +762,7 @@ void ETS2KeyBinderWizard::on_pushButton_4_clicked() {
     box.setWindowTitle("雨刮器 绑定");
     box.setText("是否绑定？");
     int ret = box.exec();
-    if (ret == QMessageBox::Yes) {
+    if (ret == QMessageBox::Ok) {
         backupProfile(); // 备份配置文件
 
         // config_lines[383]: "mix wipers0 `!joy3.b1?0 & !joy3.b2?0 & !joy3.b3?0 | semantical.wipers0?0`"
