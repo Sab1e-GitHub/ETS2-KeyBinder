@@ -18,7 +18,7 @@ using namespace std;
 
 // 欧卡2 设置    “摇杆 Button0” 0基索引
 // 欧卡2 配置文件 “joy.b1”      1基索引
-// pygame Button_Index         0基索引
+// dinput Button_Index         0基索引
 
 ETS2KeyBinderWizard::ETS2KeyBinderWizard(QWidget* parent) : QWizard(parent), ui(new Ui::ETS2KeyBinderWizard) {
     ui->setupUi(this);
@@ -165,7 +165,6 @@ QStringList ETS2KeyBinderWizard::getDeviceNameGameList() {
                 QString guid = "{" + match.captured(1) + "}|{" + match.captured(2) + "}";
                 QString name = match.captured(3).trimmed();
                 deviceNameList.insert_or_assign(guid, name);
-                qDebug() << "GUID:" << guid << "名称:" << name;
             }
         }
     }
@@ -904,14 +903,10 @@ void ETS2KeyBinderWizard::oneKeyBind(BindingType bindingType, const QString& mes
     box.setText("是否绑定？");
     int ret = box.exec();
     if (ret == QMessageBox::Ok) {
-        qDebug() << "绑定按键:" << keyPos;
-        qDebug() << "绑定类型:" << (int)bindingType;
         backupProfile(); // 备份配置文件
         int gameJoyPosIndex = ui->comboBox_2->currentIndex();
         QString ets2BtnStr = gameJoyPosNameList[gameJoyPosIndex].trimmed() + ".b" + QString::number(keyPos + 1) + "?0";
         modifyControlsSii(selectedProfilePath, bindingType, ets2BtnStr);
-    } else {
-        qDebug() << "取消绑定！";
     }
 }
 
