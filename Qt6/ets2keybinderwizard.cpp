@@ -967,3 +967,26 @@ void ETS2KeyBinderWizard::on_pushButton_14_clicked() {
 void ETS2KeyBinderWizard::on_pushButton_15_clicked() {
     oneKeyBind(BindingType::lighthorn, "请将拨杆拨到：\n" + MEG_BOX_LINE + "\n灯光喇叭");
 }
+
+// 接线提示
+void ETS2KeyBinderWizard::on_pushButton_17_clicked() {
+    QLabel* labelImage = new QLabel(this, Qt::Dialog | Qt::WindowCloseButtonHint);
+    labelImage->setWindowTitle("接线提示");
+
+    QString imagePath = ":/ETS2_KeyBinder/ConnectTip_WuLing.png";
+
+    QFileInfo file(imagePath);
+
+    if (file.exists()) {
+        QImage image;
+        image.load(imagePath);
+
+        // Label跟随图片大小变化
+        labelImage->resize(QSize(image.width(), image.height()));
+        labelImage->setPixmap(QPixmap::fromImage(image));
+
+    } else {
+        qDebug() << "未找到该图片";
+    }
+    labelImage->show();
+}

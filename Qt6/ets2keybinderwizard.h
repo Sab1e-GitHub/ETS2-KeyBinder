@@ -90,6 +90,8 @@ private slots:
 
     void on_pushButton_15_clicked();
 
+    void on_pushButton_17_clicked();
+
 private:
     Ui::ETS2KeyBinderWizard* ui;
 

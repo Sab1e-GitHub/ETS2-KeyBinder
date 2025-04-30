@@ -370,18 +370,42 @@
     <property name="bottomMargin">
      <number>9</number>
     </property>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_22">
-      <property name="text">
-       <string>   0、手动绑定</string>
+    <item row="4" column="0" colspan="3">
+     <widget class="QWidget" name="widget_2" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
-     </widget>
-    </item>
-    <item row="2" column="0" colspan="3">
-     <widget class="Line" name="line_5">
-      <property name="orientation">
-       <enum>Qt::Orientation::Horizontal</enum>
-      </property>
+      <layout class="QGridLayout" name="gridLayout_5">
+       <property name="leftMargin">
+        <number>9</number>
+       </property>
+       <property name="topMargin">
+        <number>9</number>
+       </property>
+       <property name="rightMargin">
+        <number>9</number>
+       </property>
+       <property name="bottomMargin">
+        <number>9</number>
+       </property>
+       <item row="1" column="0" colspan="2">
+        <widget class="QCheckBox" name="checkBox_3">
+         <property name="text">
+          <string>绑定单个灯光映射（暂仅支持控制器的单个按键绑定）</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="2">
+        <widget class="Line" name="line_3">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
     <item row="3" column="0" colspan="3">
@@ -391,33 +415,25 @@
       </property>
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout_6">
-        <item row="2" column="1">
-         <widget class="QPushButton" name="pushButton_3">
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_8">
           <property name="text">
-           <string>自动绑定</string>
+           <string>4、雨刮器</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
-         <widget class="QPushButton" name="pushButton_4">
-          <property name="text">
-           <string>自动绑定</string>
+        <item row="6" column="0" colspan="2">
+         <spacer name="verticalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>2、远光灯 &amp; 灯光喇叭</string>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
           </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_7">
-          <property name="text">
-           <string>3、左转向灯 &amp; 右转向灯</string>
-          </property>
-         </widget>
+         </spacer>
         </item>
         <item row="0" column="1">
          <widget class="QPushButton" name="pushButton">
@@ -432,10 +448,10 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_8">
+        <item row="3" column="1">
+         <widget class="QPushButton" name="pushButton_4">
           <property name="text">
-           <string>4、雨刮器</string>
+           <string>自动绑定</string>
           </property>
          </widget>
         </item>
@@ -452,6 +468,20 @@
           </property>
          </widget>
         </item>
+        <item row="2" column="1">
+         <widget class="QPushButton" name="pushButton_3">
+          <property name="text">
+           <string>自动绑定</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>2、远光灯 &amp; 灯光喇叭</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_5">
           <property name="sizePolicy">
@@ -465,18 +495,26 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="0" colspan="2">
-         <spacer name="verticalSpacer_5">
-          <property name="orientation">
-           <enum>Qt::Orientation::Vertical</enum>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>3、左转向灯 &amp; 右转向灯</string>
           </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
+         </widget>
+        </item>
+        <item row="7" column="1">
+         <widget class="QPushButton" name="pushButton_17">
+          <property name="text">
+           <string>接线提示</string>
           </property>
-         </spacer>
+         </widget>
+        </item>
+        <item row="7" column="0">
+         <widget class="QLabel" name="label_23">
+          <property name="text">
+           <string>-1、五菱宏光转向灯拨杆</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -684,42 +722,18 @@
       </widget>
      </widget>
     </item>
-    <item row="4" column="0" colspan="3">
-     <widget class="QWidget" name="widget_2" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+    <item row="2" column="0" colspan="3">
+     <widget class="Line" name="line_5">
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
       </property>
-      <layout class="QGridLayout" name="gridLayout_5">
-       <property name="leftMargin">
-        <number>9</number>
-       </property>
-       <property name="topMargin">
-        <number>9</number>
-       </property>
-       <property name="rightMargin">
-        <number>9</number>
-       </property>
-       <property name="bottomMargin">
-        <number>9</number>
-       </property>
-       <item row="1" column="0" colspan="2">
-        <widget class="QCheckBox" name="checkBox_3">
-         <property name="text">
-          <string>绑定单个灯光映射（暂仅支持控制器的单个按键绑定）</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" colspan="2">
-        <widget class="Line" name="line_3">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_22">
+      <property name="text">
+       <string>   0、手动绑定</string>
+      </property>
      </widget>
     </item>
     <item row="1" column="1" colspan="2">
