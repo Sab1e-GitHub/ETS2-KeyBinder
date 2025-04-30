@@ -214,7 +214,7 @@ bool ETS2KeyBinderWizard::backupProfile() {
         return false;
     }
 
-    return QFile::copy(selectedProfilePath, selectedProfilePath + QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss") + ".bak");
+    return QFile::copy(selectedProfilePath, selectedProfilePath + "." + QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss") + ".bak");
 }
 
 void ETS2KeyBinderWizard::on_comboBox_activated(int index) {
