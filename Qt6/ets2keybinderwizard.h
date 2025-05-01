@@ -40,7 +40,11 @@ public:
     ~ETS2KeyBinderWizard();
 
     QStringList getDeviceNameGameList();
+
     void oneKeyBind(BindingType bindingType, const QString& message);
+    void multiKeyBind(std::map<BindingType, ActionEffect> actionEffectMap);
+
+    std::vector<BigKey> getMultiKeyState(const QString& title, const QStringList& messages);
 
 signals:
     void keyStateUpdate_Signal(BigKey& keyState); // 更新按键状态信号
