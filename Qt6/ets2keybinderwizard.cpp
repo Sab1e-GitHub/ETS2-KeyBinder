@@ -87,7 +87,7 @@ ETS2KeyBinderWizard::ETS2KeyBinderWizard(QWidget* parent) : QWizard(parent), ui(
                 showKeyState = new ShowKeyState();
                 showKeyState->setWindowTitle("按键状态");
                 // 设置坐标为主窗口的左边
-                showKeyState->setGeometry(this->geometry().x() - 100, this->geometry().y(), 200, 200);
+                showKeyState->setGeometry(this->geometry().x() - 180, this->geometry().y(), 160, 200);
                 showKeyState->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Dialog | Qt::WindowCloseButtonHint); // 设置窗口为置顶
                 showKeyState->setKeyCount(capabilities.dwButtons);                                               // 设置按键数量
                 showKeyState->setAttribute(Qt::WA_DeleteOnClose);                                                // 关闭时删除窗口对象
