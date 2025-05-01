@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QProcess>
 #include <QTimer>
 #include <map>
 #include <string>
@@ -330,6 +331,7 @@ QString convertToETS2_String(const QString& gameJoyPosStr, const ActionEffect& a
         ets2BtnStr += gameJoyPosStr.trimmed() + ".b" + QString::number(item.first + 1) + "?0 & ";
     }
     ets2BtnStr.chop(3); // 去掉最后的 &
+    qDebug() << "转换后的 ETS2 按键字符串:" << ets2BtnStr;
     return ets2BtnStr;
 }
 
@@ -455,7 +457,7 @@ void ETS2KeyBinderWizard::scanDevice() {
 }
 
 // 生成映射文件
-bool ETS2KeyBinderWizard::generateMappingFile(int hblightKeyIndex, int lightHornKeyIndex, bool multiBtnFlag) {
+bool ETS2KeyBinderWizard::generateMappingFile(ActionEffect hblight, ActionEffect lighthorn) {
     // LightBinder.di_mappings_config 文件格式
     // [
     //     {"dev_btn_name":"按键4", "dev_btn_type":"wheel_button", "dev_btn_value":"0", "keyboard_name":"K", "keyboard_value":37,
@@ -468,15 +470,26 @@ bool ETS2KeyBinderWizard::generateMappingFile(int hblightKeyIndex, int lightHorn
         qDebug() << "无法打开文件:" << lightBindingFile.fileName();
         return false;
     }
-    QTextStream in(&lightBindingFile);
-    in << "[\n{\"dev_btn_name\":\"按键" << QString::number(hblightKeyIndex)
-       << "\", \"dev_btn_type\":\"wheel_button\", \"dev_btn_value\":\"0\", \"keyboard_name\":\"K\", \"keyboard_value\":37, "
-          "\"remark\":\"远光灯\", \"rotateAxis\":0, \"btnTriggerType\":5},\n";
-    if (multiBtnFlag) {
-        in << "{\"dev_btn_name\":\"按键" << QString::number(hblightKeyIndex) + "+按键" << QString::number(lightHornKeyIndex);
-    } else {
-        in << "{\"dev_btn_name\":\"按键" << QString::number(hblightKeyIndex);
+    QString hblightKeyStr, lighthornKeyStr;
+    for (auto item : hblight) {
+        if (item.second) {
+            hblightKeyStr += "按键" + QString::number(item.first) + "+";
+        }
     }
+    hblightKeyStr.chop(1); // 去掉最后一个 +
+    for (auto item : lighthorn) {
+        if (item.second) {
+            lighthornKeyStr += "按键" + QString::number(item.first) + "+";
+        }
+    }
+    lighthornKeyStr.chop(1); // 去掉最后一个 +
+
+    QTextStream in(&lightBindingFile);
+    in << "[\n{\"dev_btn_name\":\"" << hblightKeyStr;
+    in << "\", \"dev_btn_type\":\"wheel_button\", \"dev_btn_value\":\"0\", \"keyboard_name\":\"K\", \"keyboard_value\":37, "
+          "\"remark\":\"远光灯\", \"rotateAxis\":0, \"btnTriggerType\":5},\n";
+
+    in << "{\"dev_btn_name\":\"" << lighthornKeyStr;
     in << "\", \"dev_btn_type\":\"wheel_button\", \"dev_btn_value\":\"0\", \"keyboard_name\":\"J\", \"keyboard_value\":36,"
           "\"remark\":\"灯光喇叭\", \"rotateAxis\":0, \"btnTriggerType\":0}\n]\n";
     return true;
@@ -523,7 +536,7 @@ void ETS2KeyBinderWizard::oneKeyBind(BindingType bindingType, const QString& mes
 }
 
 void ETS2KeyBinderWizard::multiKeyBind(std::map<BindingType, ActionEffect> actionEffectMap) {
-    QMessageBox box(QMessageBox::Information, "多按键绑定", "是否绑定？");
+    QMessageBox box(QMessageBox::Information, "多操作绑定", "是否绑定？");
     box.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
     int ret = box.exec();
     if (ret == QMessageBox::Ok) {
@@ -599,51 +612,57 @@ void ETS2KeyBinderWizard::on_pushButton_2_clicked() {
         return; // 取消操作
     }
 
-    // 找出变化按键，实际上不止一个变化
-    BigKey diffKey1 = keyStates[0] ^ keyStates[1]; // 关闭灯光和远光灯的异或
-    BigKey diffKey2 = keyStates[0] ^ keyStates[2]; // 关闭灯光和灯光喇叭的异或
-    BigKey diffKey3 = keyStates[1] ^ keyStates[2]; // 远光灯和灯光喇叭的异或
-
-    vector<int> diffKey1Index, diffKey2Index, diffKey3Index;
+    // 找出变化按键
+    std::map<BindingType, ActionEffect> actionEffectMap = {
+        {BindingType::hblight, ActionEffect()},
+        {BindingType::lighthorn, ActionEffect()},
+    };
     for (size_t i = 0; i < capabilities.dwButtons; i++) {
-        if (diffKey1.getBit(i)) {
-            diffKey1Index.push_back(i);
-        }
-        if (diffKey2.getBit(i)) {
-            diffKey2Index.push_back(i);
-        }
-        if (diffKey3.getBit(i)) {
-            diffKey3Index.push_back(i);
+        if (keyStates[1].getBit(i) != keyStates[0].getBit(i) || keyStates[2].getBit(i) != keyStates[0].getBit(i)) {
+            actionEffectMap[BindingType::hblight].insert_or_assign(i, keyStates[1].getBit(i));
+            actionEffectMap[BindingType::lighthorn].insert_or_assign(i, keyStates[2].getBit(i));
         }
     }
-    if (diffKey1Index.size() < 1 || diffKey2Index.size() < 1 || diffKey3Index.size() < 1) {
+    if (actionEffectMap[BindingType::hblight].size() < 1 || actionEffectMap[BindingType::lighthorn].size() < 1) {
         QMessageBox::critical(this, "错误", "部分操作没有找到变化的按键！");
         return;
     }
-
-    // 默认     01
-    // 远光灯   10
-    // 灯光喇叭 11
-
-    if (diffKey1Index.size() > 1) {
-        if (keyStates[1].getBit(diffKey1Index[0])) {
-            // 远光灯在前，灯光喇叭在后
-            generateMappingFile(diffKey1Index[0], diffKey1Index[1], true);
-        } else {
-            generateMappingFile(diffKey1Index[1], diffKey1Index[0], true);
+    if (keyStates[1] == keyStates[2]) {
+        QMessageBox box(QMessageBox::Information, "提示", "远光灯和灯光喇叭的按键相同\n" + MEG_BOX_LINE + "\n您是想绑定：",
+                        QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+        box.setDefaultButton(QMessageBox::Cancel);
+        box.setButtonText(QMessageBox::Yes, "远光灯");
+        box.setButtonText(QMessageBox::No, "灯光喇叭");
+        box.exec();
+        if (box.clickedButton() == box.button(QMessageBox::Cancel)) {
+            return; // 取消操作
+        } else if (box.clickedButton() == box.button(QMessageBox::Yes)) {
+            multiKeyBind(std::map<BindingType, ActionEffect>{{BindingType::hblight, actionEffectMap[BindingType::hblight]}});
+        } else if (box.clickedButton() == box.button(QMessageBox::No)) {
+            multiKeyBind(std::map<BindingType, ActionEffect>{{BindingType::lighthorn, actionEffectMap[BindingType::lighthorn]}});
         }
     } else {
-        generateMappingFile(diffKey1Index[0], diffKey2Index[0], false);
-    }
 
-    // 4、生成配置文件
-    QMessageBox box(QMessageBox::Information, "远光灯&灯光喇叭", "");
-    box.setText("游戏不支持开关类型的远光灯绑定，已生成配置文件 \"" + MAPPING_FILE_NAME + "\"\n"
-                + "请打开“KeyMappingsTool”使用此配置文件，间接实现拨杆映射。\n\n配置文件路径：\n" + QDir::homePath()
-                + "/AppData/Local/KeyMappingToolData/userMappings/" + MAPPING_FILE_NAME + ".di_mappings_config\n\n"
-                + "KeyMappingsTool 下载地址：\nhttps://github.com/InsistonTan/KeyMappingsTool/releases");
-    box.setStandardButtons(QMessageBox::Ok);
-    box.exec();
+        // 4、生成配置文件
+        generateMappingFile(actionEffectMap[BindingType::hblight], actionEffectMap[BindingType::lighthorn]);
+        backupProfile(); // 备份配置文件
+        modifyControlsSii(selectedProfilePath, BindingType::hblight, "keyboard.k?0");
+        modifyControlsSii(selectedProfilePath, BindingType::lighthorn, "keyboard.j?0");
+
+        QMessageBox box(QMessageBox::Information, "远光灯&灯光喇叭", "");
+        box.setText("游戏不支持开关类型的远光灯绑定，已生成配置文件 \"" + MAPPING_FILE_NAME + "\"\n"
+                    + "请打开“KeyMappingsTool”使用此配置文件，间接实现拨杆映射。\n\n配置文件路径：\n" + QDir::homePath()
+                    + "/AppData/Local/KeyMappingToolData/userMappings/" + MAPPING_FILE_NAME + ".di_mappings_config\n\n"
+                    + "KeyMappingsTool 下载地址：\nhttps://github.com/InsistonTan/KeyMappingsTool/releases"
+                      "\n\n是否尝试打开“KeyMappingsTool”？");
+        box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        box.exec();
+        if (box.clickedButton() == box.button(QMessageBox::Yes)) {
+            // 打开 KeyMappingsTool，当自身程序关闭时，KeyMappingsTool不需要关闭
+            QString keyMappingsToolPath = "KeyMappingsTool.exe";
+            QProcess::startDetached(keyMappingsToolPath);
+        }
+    }
 }
 
 // 3、左转向灯&右转向灯
