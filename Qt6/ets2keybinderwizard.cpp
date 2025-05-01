@@ -888,7 +888,7 @@ void ETS2KeyBinderWizard::on_pushButton_17_clicked() {
     QLabel* labelImage = new QLabel(this, Qt::Dialog | Qt::WindowCloseButtonHint);
     labelImage->setWindowTitle("接线提示");
 
-    QString imagePath = ":/ETS2_KeyBinder/ConnectTip_WuLing.png";
+    QString imagePath = ":/ETS2_KeyBinder/ConnectTip_WuLing.jpg";
 
     QFileInfo file(imagePath);
 
