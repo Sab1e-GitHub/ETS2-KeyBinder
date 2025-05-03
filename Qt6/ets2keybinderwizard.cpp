@@ -656,6 +656,7 @@ void ETS2KeyBinderWizard::on_pushButton_2_clicked() {
         modifyControlsSii(selectedProfilePath, BindingType::lighthorn, "keyboard.j?0");
 
         QMessageBox box(QMessageBox::Information, "远光灯&灯光喇叭", "");
+#if defined(INDEPENDENT_MODE)
         box.setText("游戏不支持开关类型的远光灯绑定，已生成配置文件 \"" + MAPPING_FILE_NAME + "\"\n"
                     + "请打开“KeyMappingsTool”使用此配置文件，间接实现拨杆映射。\n\n配置文件路径：\n" + QDir::homePath()
                     + "/AppData/Local/KeyMappingToolData/userMappings/" + MAPPING_FILE_NAME + ".di_mappings_config\n\n"
@@ -668,6 +669,15 @@ void ETS2KeyBinderWizard::on_pushButton_2_clicked() {
             QString keyMappingsToolPath = "KeyMappingsTool.exe";
             QProcess::startDetached(keyMappingsToolPath);
         }
+#else
+        // 此组件合并至 KeyMappingsTool 中，不再单独使用，所以不需要提示用户打开 KeyMappingsTool
+        box.setText("游戏不支持开关类型的远光灯绑定\n\n"
+                    "请回到主界面，选择“映射键盘”\n"
+                    "并选择生成的配置文件\""
+                    + MAPPING_FILE_NAME + "\"\n");
+        box.setStandardButtons(QMessageBox::Yes);
+        box.exec();
+#endif
     }
 }
 

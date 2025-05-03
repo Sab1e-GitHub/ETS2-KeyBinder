@@ -41,6 +41,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 INCLUDEPATH += $$PWD/SCS_Telemetry
 # DEPENDPATH += $$PWD/.
 
+# DEFINES += INDEPENDENT_MODE=1
+
 #LIBS += -L$$PWD/ -lhidapi
 
 # LIBS += -L$$PWD/ -lViGEmClient
