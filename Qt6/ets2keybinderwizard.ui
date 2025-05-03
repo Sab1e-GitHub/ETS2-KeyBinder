@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>426</width>
-    <height>404</height>
+    <height>431</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -567,9 +567,9 @@
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>-232</y>
-             <width>374</width>
-             <height>435</height>
+             <y>0</y>
+             <width>213</width>
+             <height>450</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_8">
