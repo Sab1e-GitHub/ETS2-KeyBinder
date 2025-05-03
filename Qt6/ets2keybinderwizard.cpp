@@ -11,6 +11,7 @@
 #include <string>
 
 // 参考开源项目：https://github.com/Sab1e-GitHub/ETS2-KeyBinder
+// 参考开源项目：https://github.com/InsistonTan/KeyMappingsTool
 
 const QString MEG_BOX_LINE = "------------------------";
 const QString MAPPING_FILE_NAME = "LightBinder";

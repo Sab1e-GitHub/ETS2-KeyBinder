@@ -1,6 +1,8 @@
 #include <QString>
 #include <global.h>
 
+// 参考开源项目：https://github.com/InsistonTan/KeyMappingsTool
+
 QList<DiDeviceInfo> diDeviceList;
 
 // DirectInput 回调函数，用于列出所有连接的游戏控制器设备

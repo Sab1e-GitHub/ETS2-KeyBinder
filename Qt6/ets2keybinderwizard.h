@@ -1,6 +1,9 @@
 #ifndef ETS2KEYBINDERWIZARD_H
 #define ETS2KEYBINDERWIZARD_H
 
+// 参考开源项目：https://github.com/Sab1e-GitHub/ETS2-KeyBinder
+// 参考开源项目：https://github.com/InsistonTan/KeyMappingsTool
+
 #include "BigKey.hpp"
 #include "global.h"
 #include "showkeystate.h"

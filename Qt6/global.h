@@ -1,6 +1,8 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
+// 参考开源项目：https://github.com/InsistonTan/KeyMappingsTool
+
 #include <QList>
 #include <dinput.h>
 #include <string>
