@@ -260,13 +260,19 @@ void modifyControlsSii(const QString& controlsFilePath, BindingType bindingType,
         {BindingType::hblight, R"(mix hblight `.*?semantical\.hblight\?0`)"},
         {BindingType::lblinkerh, R"(mix lblinkerh `.*?semantical\.lblinkerh\?0`)"},
         {BindingType::rblinkerh, R"(mix rblinkerh `.*?semantical\.rblinkerh\?0`)"},
+        {BindingType::gearsel1off, R"(mix gearsel1off `.*?semantical\.gearsel1off\?0`)"},
+        {BindingType::gearsel1on, R"(mix gearsel1on `.*?semantical\.gearsel1on\?0`)"},
+        {BindingType::gearsel2off, R"(mix gearsel2off `.*?semantical\.gearsel2off\?0`)"},
+        {BindingType::gearsel2on, R"(mix gearsel2on `.*?semantical\.gearsel2on\?0`)"},
     };
 
     map<BindingType, QString> bindingTypeString = {
-        {BindingType::lightoff, "lightoff"},   {BindingType::lighthorn, "lighthorn"}, {BindingType::wipers0, "wipers0"},
-        {BindingType::wipers1, "wipers1"},     {BindingType::wipers2, "wipers2"},     {BindingType::wipers3, "wipers3"},
-        {BindingType::lightpark, "lightpark"}, {BindingType::lighton, "lighton"},     {BindingType::hblight, "hblight"},
-        {BindingType::lblinkerh, "lblinkerh"}, {BindingType::rblinkerh, "rblinkerh"}};
+        {BindingType::lightoff, "lightoff"},     {BindingType::lighthorn, "lighthorn"},     {BindingType::wipers0, "wipers0"},
+        {BindingType::wipers1, "wipers1"},       {BindingType::wipers2, "wipers2"},         {BindingType::wipers3, "wipers3"},
+        {BindingType::lightpark, "lightpark"},   {BindingType::lighton, "lighton"},         {BindingType::hblight, "hblight"},
+        {BindingType::lblinkerh, "lblinkerh"},   {BindingType::rblinkerh, "rblinkerh"},     {BindingType::gearsel1off, "gearsel1off"},
+        {BindingType::gearsel1on, "gearsel1on"}, {BindingType::gearsel2off, "gearsel2off"}, {BindingType::gearsel2on, "gearsel2on"},
+    };
 
     if (replaceRules.find(bindingType) == replaceRules.end()) {
         qWarning() << "无效的绑定类型";
@@ -740,6 +746,64 @@ void ETS2KeyBinderWizard::on_pushButton_4_clicked() {
     multiKeyBind(actionEffectMap); // 多按键绑定
 }
 
+// 5、档位开关1
+void ETS2KeyBinderWizard::on_pushButton_18_clicked() {
+    QString messageTitle = "档位开关1";
+    QStringList messages = {
+        "档位开关1拨到：\n" + MEG_BOX_LINE + "\n低档位",
+        "档位开关1拨到：\n" + MEG_BOX_LINE + "\n高档位",
+    };
+    std::vector<BigKey> keyStates = getMultiKeyState(messageTitle, messages);
+    if (keyStates.empty()) {
+        return; // 取消操作
+    }
+
+    map<BindingType, ActionEffect> actionEffectMap = {
+        {BindingType::gearsel1off, ActionEffect()},
+        {BindingType::gearsel1on, ActionEffect()},
+    };
+    for (size_t i = 0; i < capabilities.dwButtons; i++) {
+        if (keyStates[1].getBit(i) != keyStates[0].getBit(i)) {
+            actionEffectMap[BindingType::gearsel1on].insert_or_assign(i, keyStates[1].getBit(i));
+            actionEffectMap[BindingType::gearsel1off].insert_or_assign(i, keyStates[0].getBit(i));
+        }
+    }
+    if (actionEffectMap[BindingType::gearsel1off].size() < 1) {
+        QMessageBox::critical(this, "错误", "没有找到变化的按键！");
+        return;
+    }
+    multiKeyBind(actionEffectMap); // 多按键绑定
+}
+
+// 6、档位开关2
+void ETS2KeyBinderWizard::on_pushButton_19_clicked() {
+    QString messageTitle = "档位开关2";
+    QStringList messages = {
+        "档位开关2拨到：\n" + MEG_BOX_LINE + "\n低档位",
+        "档位开关2拨到：\n" + MEG_BOX_LINE + "\n高档位",
+    };
+    std::vector<BigKey> keyStates = getMultiKeyState(messageTitle, messages);
+    if (keyStates.empty()) {
+        return; // 取消操作
+    }
+
+    map<BindingType, ActionEffect> actionEffectMap = {
+        {BindingType::gearsel2off, ActionEffect()},
+        {BindingType::gearsel2on, ActionEffect()},
+    };
+    for (size_t i = 0; i < capabilities.dwButtons; i++) {
+        if (keyStates[1].getBit(i) != keyStates[0].getBit(i)) {
+            actionEffectMap[BindingType::gearsel2on].insert_or_assign(i, keyStates[1].getBit(i));
+            actionEffectMap[BindingType::gearsel2off].insert_or_assign(i, keyStates[0].getBit(i));
+        }
+    }
+    if (actionEffectMap[BindingType::gearsel2off].size() < 1) {
+        QMessageBox::critical(this, "错误", "没有找到变化的按键！");
+        return;
+    }
+    multiKeyBind(actionEffectMap); // 多按键绑定
+}
+
 BigKey ETS2KeyBinderWizard::getKeyState() {
     BigKey keyState;
     DIJOYSTATE2 js;
@@ -881,6 +945,26 @@ void ETS2KeyBinderWizard::on_pushButton_14_clicked() {
 // 灯光喇叭
 void ETS2KeyBinderWizard::on_pushButton_15_clicked() {
     oneKeyBind(BindingType::lighthorn, "请将拨杆拨到：\n" + MEG_BOX_LINE + "\n灯光喇叭");
+}
+
+// 12、档位开关1关闭
+void ETS2KeyBinderWizard::on_pushButton_20_clicked() {
+    oneKeyBind(BindingType::gearsel1off, "请将档位开关1拨到：\n" + MEG_BOX_LINE + "\n低档位");
+}
+
+// 13、档位开关1打开
+void ETS2KeyBinderWizard::on_pushButton_21_clicked() {
+    oneKeyBind(BindingType::gearsel1on, "请将档位开关1拨到：\n" + MEG_BOX_LINE + "\n高档位");
+}
+
+// 14、档位开关2关闭
+void ETS2KeyBinderWizard::on_pushButton_22_clicked() {
+    oneKeyBind(BindingType::gearsel2off, "请将档位开关2拨到：\n" + MEG_BOX_LINE + "\n低档位");
+}
+
+// 15、档位开关2打开
+void ETS2KeyBinderWizard::on_pushButton_23_clicked() {
+    oneKeyBind(BindingType::gearsel2on, "请将档位开关2拨到：\n" + MEG_BOX_LINE + "\n高档位");
 }
 
 // 接线提示

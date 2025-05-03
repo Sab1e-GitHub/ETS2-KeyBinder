@@ -13,17 +13,21 @@
 // 枚举类型定义
 enum class BindingType
 {
-    lightoff,  // 关闭灯光
-    lightpark, // 示廓灯
-    lighton,   // 近光灯
-    lblinkerh, // 左转向灯
-    rblinkerh, // 右转向灯
-    hblight,   // 远光灯
-    lighthorn, // 灯光喇叭
-    wipers0,   // 雨刷器关闭
-    wipers1,   // 雨刷器1档
-    wipers2,   // 雨刷器2档
-    wipers3,   // 雨刷器3档
+    lightoff,    // 关闭灯光
+    lightpark,   // 示廓灯
+    lighton,     // 近光灯
+    lblinkerh,   // 左转向灯
+    rblinkerh,   // 右转向灯
+    hblight,     // 远光灯
+    lighthorn,   // 灯光喇叭
+    wipers0,     // 雨刷器关闭
+    wipers1,     // 雨刷器1档
+    wipers2,     // 雨刷器2档
+    wipers3,     // 雨刷器3档
+    gearsel1off, // 档位开关1关闭
+    gearsel1on,  // 档位开关1打开
+    gearsel2off, // 档位开关2关闭
+    gearsel2on,  // 档位开关2打开
 };
 
 typedef std::map<int, bool> ActionEffect; // 受影响的按键位置和对应的新状态
@@ -95,6 +99,18 @@ private slots:
     void on_pushButton_15_clicked();
 
     void on_pushButton_17_clicked();
+
+    void on_pushButton_18_clicked();
+
+    void on_pushButton_19_clicked();
+
+    void on_pushButton_20_clicked();
+
+    void on_pushButton_21_clicked();
+
+    void on_pushButton_22_clicked();
+
+    void on_pushButton_23_clicked();
 
 private:
     Ui::ETS2KeyBinderWizard* ui;
