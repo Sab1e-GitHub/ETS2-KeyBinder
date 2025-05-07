@@ -45,3 +45,8 @@
 这种方式适合所有的设备，手动输入按键索引进行绑定，支持按下与松开的复杂组合键绑定
 
 ![image](https://github.com/user-attachments/assets/f3b84830-4e56-48a4-8846-c8eb381c5e8e)
+
+# 说明
+Qt6：用Qt6 C++ 重新编写的按键绑定工具，有图形化界面，支持复杂组合键绑定。
+
+PythonCommandLine(Old)：旧工程，这里面是原作者用Python的编写的命令行绑定工具，只支持单按键绑定。
