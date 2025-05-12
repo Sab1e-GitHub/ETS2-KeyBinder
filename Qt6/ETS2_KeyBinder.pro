@@ -43,6 +43,10 @@ INCLUDEPATH += $$PWD/SCS_Telemetry
 
 DEFINES += INDEPENDENT_MODE=1
 
+CONFIG (release, debug|release) {
+DEFINES += QT_NO_DEBUG_OUTPUT
+}
+
 #LIBS += -L$$PWD/ -lhidapi
 
 # LIBS += -L$$PWD/ -lViGEmClient
