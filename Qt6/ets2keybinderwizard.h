@@ -142,6 +142,7 @@ private:
     ShowKeyState* showKeyState = nullptr; // 显示按键状态窗口
     QTimer* timer = nullptr;              // 定时器
 
+    DIJOYSTATE2 getInputState();
     BigKey getKeyState();
 
     bool hasLastDevInCurrentDeviceList(std::string lastDeviceName);
