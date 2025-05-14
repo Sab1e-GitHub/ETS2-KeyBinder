@@ -148,12 +148,16 @@ private:
     bool openDiDevice(int deviceIndex, HWND hWnd);
     void scanDevice();
     bool initDirectInput();
-    bool checkHardwareDeviceAndMsgBox();
+    bool checkHardwareDeviceAndMsgBox(BindingType bindingType = BindingType::lightpark);
 
     void updateUserProfile();
     bool backupProfile();
 
     bool generateMappingFile(ActionEffect hblight, ActionEffect lighthorn);
+
+    void modifyControlsSii(const QString& controlsFilePath, BindingType bindingType, const QString& ets2BtnStr);
+
+    void showManuallyBinder(BindingType bindingType);
 };
 
 #endif // ETS2KEYBINDERWIZARD_H
