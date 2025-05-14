@@ -15,13 +15,14 @@
 
 const QString MEG_BOX_LINE = "------------------------";
 const QString MAPPING_FILE_NAME = "LightBinder";
+
 #define POV_MAX (4 * 4)
 std::map<int, size_t> povStandMap = {{0, 0}, {90, 1}, {180, 2}, {270, 3}}; // POV方向映射
+std::map<size_t, QString> povUiMap = {{0, "0度"}, {1, "90度"}, {2, "180度"}, {3, "270度"}};
 std::map<size_t, QString> povStringMap = {{0, "pov1_up"},  {1, "pov1_right"},  {2, "pov1_down"},  {3, "pov1_left"},
                                           {4, "pov2_up"},  {5, "pov2_right"},  {6, "pov2_down"},  {7, "pov2_left"},
                                           {8, "pov3_up"},  {9, "pov3_right"},  {10, "pov3_down"}, {11, "pov3_left"},
                                           {12, "pov4_up"}, {13, "pov4_right"}, {14, "pov4_down"}, {15, "pov4_left"}};
-
 using namespace std;
 
 // 欧卡2 设置    “摇杆 Button0” 0基索引
@@ -136,9 +137,18 @@ ETS2KeyBinderWizard::ETS2KeyBinderWizard(QWidget* parent) : QWizard(parent), ui(
                     if (pDevice && showKeyState) {
                         BigKey keyState = getKeyState();     // 获取按键状态
                         showKeyState->setKeyState(keyState); // 更新按键状态窗口
+                        QString povState;
+                        for (size_t i = capabilities.dwButtons; i < capabilities.dwButtons + POV_MAX; i++) {
+                            size_t povIndex = i - capabilities.dwButtons;
+                            if (keyState.getBit(i)) {
+                                povState += povUiMap[povIndex % 4] + ",";
+                            }
+                        }
+                        povState.chop(1);                    // 去掉最后一个逗号
+                        showKeyState->setPovState(povState); // 更新十字键状态
                     }
                 });
-                timer->start(100); // 每100毫秒更新一次
+                timer->start(50); // 每50毫秒更新一次
             }
         }
     });
@@ -879,7 +889,6 @@ void ETS2KeyBinderWizard::on_pushButton_4_clicked() {
         keyStates[4] = keyStates[4] & (~tempKeyState);
         qDebug() << "keyStates[4]:" << keyStates[4];
     }
-
 
     for (size_t i = 0; i < capabilities.dwButtons + POV_MAX; i++) {
         if (keyStates[1].getBit(i) != keyStates[0].getBit(i)) {
