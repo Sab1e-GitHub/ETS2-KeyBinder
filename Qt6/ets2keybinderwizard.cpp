@@ -300,6 +300,7 @@ void ETS2KeyBinderWizard::modifyControlsSii(const QString& controlsFilePath, Bin
         {BindingType::wipers1, R"(mix wipers1 `.*?semantical\.wipers1\?0`)"},
         {BindingType::wipers2, R"(mix wipers2 `.*?semantical\.wipers2\?0`)"},
         {BindingType::wipers3, R"(mix wipers3 `.*?semantical\.wipers3\?0`)"},
+        {BindingType::wipers4, R"(mix wipers4 `.*?semantical\.wipers4\?0`)"},
         {BindingType::lightpark, R"(mix lightpark `.*?semantical\.lightpark\?0`)"},
         {BindingType::lighton, R"(mix lighton `.*?semantical\.lighton\?0`)"},
         {BindingType::hblight, R"(mix hblight `.*?semantical\.hblight\?0`)"},
@@ -312,11 +313,12 @@ void ETS2KeyBinderWizard::modifyControlsSii(const QString& controlsFilePath, Bin
     };
 
     map<BindingType, QString> bindingTypeString = {
-        {BindingType::lightoff, "lightoff"},     {BindingType::lighthorn, "lighthorn"},     {BindingType::wipers0, "wipers0"},
-        {BindingType::wipers1, "wipers1"},       {BindingType::wipers2, "wipers2"},         {BindingType::wipers3, "wipers3"},
-        {BindingType::lightpark, "lightpark"},   {BindingType::lighton, "lighton"},         {BindingType::hblight, "hblight"},
-        {BindingType::lblinkerh, "lblinkerh"},   {BindingType::rblinkerh, "rblinkerh"},     {BindingType::gearsel1off, "gearsel1off"},
-        {BindingType::gearsel1on, "gearsel1on"}, {BindingType::gearsel2off, "gearsel2off"}, {BindingType::gearsel2on, "gearsel2on"},
+        {BindingType::lightoff, "lightoff"},       {BindingType::lighthorn, "lighthorn"},   {BindingType::wipers0, "wipers0"},
+        {BindingType::wipers1, "wipers1"},         {BindingType::wipers2, "wipers2"},       {BindingType::wipers3, "wipers3"},
+        {BindingType::wipers4, "wipers4"},         {BindingType::lightpark, "lightpark"},   {BindingType::lighton, "lighton"},
+        {BindingType::hblight, "hblight"},         {BindingType::lblinkerh, "lblinkerh"},   {BindingType::rblinkerh, "rblinkerh"},
+        {BindingType::gearsel1off, "gearsel1off"}, {BindingType::gearsel1on, "gearsel1on"}, {BindingType::gearsel2off, "gearsel2off"},
+        {BindingType::gearsel2on, "gearsel2on"},
     };
 
     if (replaceRules.find(bindingType) == replaceRules.end()) {
@@ -833,13 +835,27 @@ void ETS2KeyBinderWizard::on_pushButton_3_clicked() {
 // 4、雨刮器
 void ETS2KeyBinderWizard::on_pushButton_4_clicked() {
     QString messageTitle = "雨刮器";
+    QString messageTitle1 = "3档雨刮器";
+    QString messageTitle2 = "4档雨刮器(3档+点动)";
     QStringList messages = {
         "请将拨杆拨到：\n" + MEG_BOX_LINE + "\n关闭位置",
         "请将拨杆拨到：\n" + MEG_BOX_LINE + "\n雨刮器1档",
         "请将拨杆拨到：\n" + MEG_BOX_LINE + "\n雨刮器2档",
         "请将拨杆拨到：\n" + MEG_BOX_LINE + "\n雨刮器3档",
     };
-    std::vector<BigKey> keyStates = getMultiKeyState(messageTitle, messages);
+    QMessageBox box(QMessageBox::Information, messageTitle, "您要绑定 " + messageTitle1 + " 还是 " + messageTitle2);
+    QPushButton* threeWipersButton = box.addButton("3档", QMessageBox::YesRole);
+    QPushButton* fourWipersButton = box.addButton("4档", QMessageBox::NoRole);
+    QPushButton* cancelButton = box.addButton("取消", QMessageBox::RejectRole);
+    box.exec();
+    if (box.clickedButton() == cancelButton) {
+        return; // 取消操作
+    } else if (box.clickedButton() == fourWipersButton) {
+        messages.append("请将拨杆拨到：\n" + MEG_BOX_LINE + "\n雨刮器4档（点动）");
+        messageTitle1 = messageTitle2;
+    }
+
+    std::vector<BigKey> keyStates = getMultiKeyState(messageTitle1, messages);
     if (keyStates.empty()) {
         return; // 取消操作
     }
@@ -851,11 +867,19 @@ void ETS2KeyBinderWizard::on_pushButton_4_clicked() {
     }
 
     std::map<BindingType, ActionEffect> actionEffectMap = {
-        {BindingType::wipers0, ActionEffect()},
-        {BindingType::wipers1, ActionEffect()},
-        {BindingType::wipers2, ActionEffect()},
-        {BindingType::wipers3, ActionEffect()},
+        {BindingType::wipers0, ActionEffect()}, {BindingType::wipers1, ActionEffect()}, {BindingType::wipers2, ActionEffect()},
+        {BindingType::wipers3, ActionEffect()}, {BindingType::wipers4, ActionEffect()},
     };
+    // 临时方法，待优化
+    if (box.clickedButton() == fourWipersButton) {
+        BigKey tempKeyState;
+        for (size_t i = 1; i < 4; i++) {
+            tempKeyState |= keyStates[0] ^ keyStates[i]; // 3档雨刮器
+        }
+        keyStates[4] = keyStates[4] & (~tempKeyState);
+        qDebug() << "keyStates[4]:" << keyStates[4];
+    }
+
 
     for (size_t i = 0; i < capabilities.dwButtons + POV_MAX; i++) {
         if (keyStates[1].getBit(i) != keyStates[0].getBit(i)) {
@@ -870,6 +894,13 @@ void ETS2KeyBinderWizard::on_pushButton_4_clicked() {
             actionEffectMap[BindingType::wipers0].insert_or_assign(i, keyStates[0].getBit(i));
             actionEffectMap[BindingType::wipers3].insert_or_assign(i, keyStates[3].getBit(i));
         }
+        if (box.clickedButton() == fourWipersButton && keyStates[4].getBit(i) != keyStates[0].getBit(i)) {
+            actionEffectMap[BindingType::wipers0].insert_or_assign(i, keyStates[0].getBit(i));
+            actionEffectMap[BindingType::wipers4].insert_or_assign(i, keyStates[4].getBit(i));
+        }
+    }
+    if (box.clickedButton() == threeWipersButton) {
+        actionEffectMap.erase(BindingType::wipers4); // 删除4档雨刮
     }
 
     multiKeyBind(actionEffectMap); // 多按键绑定
@@ -1110,6 +1141,11 @@ void ETS2KeyBinderWizard::on_pushButton_12_clicked() {
 // 雨刷3档
 void ETS2KeyBinderWizard::on_pushButton_13_clicked() {
     oneKeyBind(BindingType::wipers3, "请将拨杆拨到：\n" + MEG_BOX_LINE + "\n雨刷3档");
+}
+
+// 雨刮4档（点动）
+void ETS2KeyBinderWizard::on_pushButton_24_clicked() {
+    oneKeyBind(BindingType::wipers4, "请将拨杆拨到：\n" + MEG_BOX_LINE + "\n雨刷4档（点动）");
 }
 
 // 远光灯
