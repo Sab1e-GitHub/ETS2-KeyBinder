@@ -36,6 +36,35 @@ map<BindingType, QString> scsBtnStrMap = {
     {BindingType::gearsel2on, SCS_BTN_STR_DEFAULT},
 };
 
+// 匹配规则字典
+const map<BindingType, QString> replaceRules = {
+    {BindingType::lightoff, R"(mix lightoff `(.+?)\s*\|\s*semantical\.lightoff\?0`)"},
+    {BindingType::lighthorn, R"(mix lighthorn `(.+?)\s*\|\s*semantical\.lighthorn\?0`)"},
+    {BindingType::wipers0, R"(mix wipers0 `(.+?)\s*\|\s*semantical\.wipers0\?0`)"},
+    {BindingType::wipers1, R"(mix wipers1 `(.+?)\s*\|\s*semantical\.wipers1\?0`)"},
+    {BindingType::wipers2, R"(mix wipers2 `(.+?)\s*\|\s*semantical\.wipers2\?0`)"},
+    {BindingType::wipers3, R"(mix wipers3 `(.+?)\s*\|\s*semantical\.wipers3\?0`)"},
+    {BindingType::wipers4, R"(mix wipers4 `(.+?)\s*\|\s*semantical\.wipers4\?0`)"},
+    {BindingType::lightpark, R"(mix lightpark `(.+?)\s*\|\s*semantical\.lightpark\?0`)"},
+    {BindingType::lighton, R"(mix lighton `(.+?)\s*\|\s*semantical\.lighton\?0`)"},
+    {BindingType::hblight, R"(mix hblight `(.+?)\s*\|\s*semantical\.hblight\?0`)"},
+    {BindingType::lblinkerh, R"(mix lblinkerh `(.+?)\s*\|\s*semantical\.lblinkerh\?0`)"},
+    {BindingType::rblinkerh, R"(mix rblinkerh `(.+?)\s*\|\s*semantical\.rblinkerh\?0`)"},
+    {BindingType::gearsel1off, R"(mix gearsel1off `(.+?)\s*\|\s*semantical\.gearsel1off\?0`)"},
+    {BindingType::gearsel1on, R"(mix gearsel1on `(.+?)\s*\|\s*semantical\.gearsel1on\?0`)"},
+    {BindingType::gearsel2off, R"(mix gearsel2off `(.+?)\s*\|\s*semantical\.gearsel2off\?0`)"},
+    {BindingType::gearsel2on, R"(mix gearsel2on `(.+?)\s*\|\s*semantical\.gearsel2on\?0`)"},
+};
+
+const map<BindingType, QString> bindingTypeString = {
+    {BindingType::lightoff, "lightoff"},       {BindingType::lighthorn, "lighthorn"},   {BindingType::wipers0, "wipers0"},
+    {BindingType::wipers1, "wipers1"},         {BindingType::wipers2, "wipers2"},       {BindingType::wipers3, "wipers3"},
+    {BindingType::wipers4, "wipers4"},         {BindingType::lightpark, "lightpark"},   {BindingType::lighton, "lighton"},
+    {BindingType::hblight, "hblight"},         {BindingType::lblinkerh, "lblinkerh"},   {BindingType::rblinkerh, "rblinkerh"},
+    {BindingType::gearsel1off, "gearsel1off"}, {BindingType::gearsel1on, "gearsel1on"}, {BindingType::gearsel2off, "gearsel2off"},
+    {BindingType::gearsel2on, "gearsel2on"},
+};
+
 // 欧卡2 设置    “摇杆 Button0” 0基索引
 // 欧卡2 配置文件 “joy.b1”      1基索引
 // dinput Button_Index         0基索引
@@ -47,11 +76,11 @@ ETS2KeyBinderWizard::ETS2KeyBinderWizard(QWidget* parent) : QWizard(parent), ui(
     this->setWindowTitle(this->windowTitle() + " " + QString(__DATE__) + " " + QString(__TIME__));
 #endif
     uiBtnMap = {
-        {BindingType::lightoff, ui->pushButton_5},     {BindingType::lightpark, ui->pushButton_6},    {BindingType::lighton, ui->pushButton_7},
-        {BindingType::hblight, ui->pushButton_14},     {BindingType::lighthorn, ui->pushButton_15},   {BindingType::wipers0, ui->pushButton_10},
-        {BindingType::wipers1, ui->pushButton_11},     {BindingType::wipers2, ui->pushButton_12},     {BindingType::wipers3, ui->pushButton_13},
-        {BindingType::wipers4, ui->pushButton_24},     {BindingType::lblinkerh, ui->pushButton_8},    {BindingType::rblinkerh, ui->pushButton_9},
-        {BindingType::gearsel1off, ui->pushButton_20}, {BindingType::gearsel2off, ui->pushButton_21}, {BindingType::gearsel1on, ui->pushButton_22},
+        {BindingType::lightoff, ui->pushButton_5},     {BindingType::lightpark, ui->pushButton_6},   {BindingType::lighton, ui->pushButton_7},
+        {BindingType::hblight, ui->pushButton_14},     {BindingType::lighthorn, ui->pushButton_15},  {BindingType::wipers0, ui->pushButton_10},
+        {BindingType::wipers1, ui->pushButton_11},     {BindingType::wipers2, ui->pushButton_12},    {BindingType::wipers3, ui->pushButton_13},
+        {BindingType::wipers4, ui->pushButton_24},     {BindingType::lblinkerh, ui->pushButton_8},   {BindingType::rblinkerh, ui->pushButton_9},
+        {BindingType::gearsel1off, ui->pushButton_20}, {BindingType::gearsel1on, ui->pushButton_21}, {BindingType::gearsel2off, ui->pushButton_22},
         {BindingType::gearsel2on, ui->pushButton_23},
     };
 
@@ -118,6 +147,9 @@ ETS2KeyBinderWizard::ETS2KeyBinderWizard(QWidget* parent) : QWizard(parent), ui(
                 qDebug() << "打开设备失败！";
                 return;
             }
+
+            // 读取游戏配置文件，并更新单按键映射界面
+            readControlsSii(selectedProfilePath);
 
             if (showKeyState == nullptr) {
                 showKeyState = new ShowKeyState();
@@ -303,7 +335,7 @@ void ETS2KeyBinderWizard::on_comboBox_activated(int index) {
 }
 
 // 修改 controls.sii 文件
-void ETS2KeyBinderWizard::modifyControlsSii(const QString& controlsFilePath, BindingType bindingType, const QString& ets2BtnStr) {
+void ETS2KeyBinderWizard::readControlsSii(const QString& controlsFilePath) {
     QFile controlsFile(controlsFilePath);
 
     // 检查文件是否存在
@@ -322,34 +354,42 @@ void ETS2KeyBinderWizard::modifyControlsSii(const QString& controlsFilePath, Bin
         return;
     }
 
-    // 替换规则字典
-    const map<BindingType, QString> replaceRules = {
-        {BindingType::lightoff, R"(mix lightoff `.*?semantical\.lightoff\?0`)"},
-        {BindingType::lighthorn, R"(mix lighthorn `.*?semantical\.lighthorn\?0`)"},
-        {BindingType::wipers0, R"(mix wipers0 `.*?semantical\.wipers0\?0`)"},
-        {BindingType::wipers1, R"(mix wipers1 `.*?semantical\.wipers1\?0`)"},
-        {BindingType::wipers2, R"(mix wipers2 `.*?semantical\.wipers2\?0`)"},
-        {BindingType::wipers3, R"(mix wipers3 `.*?semantical\.wipers3\?0`)"},
-        {BindingType::wipers4, R"(mix wipers4 `.*?semantical\.wipers4\?0`)"},
-        {BindingType::lightpark, R"(mix lightpark `.*?semantical\.lightpark\?0`)"},
-        {BindingType::lighton, R"(mix lighton `.*?semantical\.lighton\?0`)"},
-        {BindingType::hblight, R"(mix hblight `.*?semantical\.hblight\?0`)"},
-        {BindingType::lblinkerh, R"(mix lblinkerh `.*?semantical\.lblinkerh\?0`)"},
-        {BindingType::rblinkerh, R"(mix rblinkerh `.*?semantical\.rblinkerh\?0`)"},
-        {BindingType::gearsel1off, R"(mix gearsel1off `.*?semantical\.gearsel1off\?0`)"},
-        {BindingType::gearsel1on, R"(mix gearsel1on `.*?semantical\.gearsel1on\?0`)"},
-        {BindingType::gearsel2off, R"(mix gearsel2off `.*?semantical\.gearsel2off\?0`)"},
-        {BindingType::gearsel2on, R"(mix gearsel2on `.*?semantical\.gearsel2on\?0`)"},
-    };
+    // 清空映射表
+    scsBtnStrMap.clear();
+    QTextStream in(&controlsFile);
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        for (auto& pair : replaceRules) {
+            QRegularExpression regex(pair.second);
+            QRegularExpressionMatch match = regex.match(line);
+            if (match.hasMatch()) {
+                QString ets2BtnStr = match.captured(1);                          // 获取 ETS2 按键字符串
+                scsBtnStrMap[pair.first] = convertToUiString(ets2BtnStr);        // 更新映射表
+                uiBtnMap.at(pair.first)->setText(convertToUiString(ets2BtnStr)); // 更新按钮文本
+            }
+        }
+    }
+}
 
-    const map<BindingType, QString> bindingTypeString = {
-        {BindingType::lightoff, "lightoff"},       {BindingType::lighthorn, "lighthorn"},   {BindingType::wipers0, "wipers0"},
-        {BindingType::wipers1, "wipers1"},         {BindingType::wipers2, "wipers2"},       {BindingType::wipers3, "wipers3"},
-        {BindingType::wipers4, "wipers4"},         {BindingType::lightpark, "lightpark"},   {BindingType::lighton, "lighton"},
-        {BindingType::hblight, "hblight"},         {BindingType::lblinkerh, "lblinkerh"},   {BindingType::rblinkerh, "rblinkerh"},
-        {BindingType::gearsel1off, "gearsel1off"}, {BindingType::gearsel1on, "gearsel1on"}, {BindingType::gearsel2off, "gearsel2off"},
-        {BindingType::gearsel2on, "gearsel2on"},
-    };
+// 修改 controls.sii 文件
+void ETS2KeyBinderWizard::modifyControlsSii(const QString& controlsFilePath, BindingType bindingType, const QString& ets2BtnStr) {
+    QFile controlsFile(controlsFilePath);
+
+    // 检查文件是否存在
+    if (!QFileInfo::exists(controlsFilePath)) {
+        qDebug() << "配置文件不存在：" << controlsFilePath;
+        QMessageBox::critical(this, "错误",
+                              "修改游戏配置文件失败：该文件不存在！参考路径：\n" + steamProfiles[ui->comboBox_4->currentIndex()]
+                                  + "/xxxxxx/controls.sii\n" + profiles[ui->comboBox_4->currentIndex()] + "/xxxxxx/controls.sii\n");
+        return;
+    }
+
+    // 打开文件并读取内容
+    if (!controlsFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "无法打开文件：" << controlsFilePath;
+        QMessageBox::critical(this, "错误", "打开游戏配置文件失败！文件路径：\n" + controlsFilePath);
+        return;
+    }
 
     if (replaceRules.find(bindingType) == replaceRules.end()) {
         qDebug() << "无效的绑定类型";

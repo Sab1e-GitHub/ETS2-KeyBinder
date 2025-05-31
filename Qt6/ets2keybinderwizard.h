@@ -165,6 +165,8 @@ private:
 
     bool generateMappingFile(ActionEffect hblight, ActionEffect lighthorn);
 
+    void readControlsSii(const QString& controlsFilePath);
+
     void modifyControlsSii(const QString& controlsFilePath, BindingType bindingType, const QString& ets2BtnStr);
 
     void showManuallyBinder(BindingType bindingType);
