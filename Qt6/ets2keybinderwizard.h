@@ -37,6 +37,9 @@ enum class BindingType
 
 typedef std::map<int, bool> ActionEffect; // 受影响的按键位置和对应的新状态
 
+QString convertToETS2_String(const QString& gameJoyPosStr, const ActionEffect& actionEffect, size_t maxButtonCount = DINPUT_MAX_BUTTONS);
+QString convertToUiString(const QString& ets2BtnStr);
+
 namespace Ui {
 class ETS2KeyBinderWizard;
 }
@@ -136,6 +139,8 @@ private:
 
     QList<QPair<QString, QDateTime>> steamProfileFolders;
     QList<QPair<QString, QDateTime>> profileFolders; // 所有配置文件列表
+
+    std::map<BindingType, QPushButton*> uiBtnMap;
 
     LPDIRECTINPUT8 pDirectInput = NULL;
     LPDIRECTINPUTDEVICE8 pDevice = NULL;
