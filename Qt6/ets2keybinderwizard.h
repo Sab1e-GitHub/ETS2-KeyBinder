@@ -8,6 +8,7 @@
 #include "global.h"
 #include "showkeystate.h"
 #include <QDir>
+#include <QStandardPaths>
 #include <QWizard>
 #include <dinput.h>
 #include <string.h>
@@ -127,10 +128,10 @@ private:
     QStringList gameJoyPosNameList = {
         "joy ", "joy2", "joy3", "joy4", "joy5",
     };
-    QString steamProfiles[2] = {QDir::homePath() + "/Documents/Euro Truck Simulator 2/steam_profiles",
-                                QDir::homePath() + "/Documents/American Truck Simulator/steam_profiles"};
-    QString profiles[2] = {QDir::homePath() + "/Documents/Euro Truck Simulator 2/profiles",
-                           QDir::homePath() + "/Documents/American Truck Simulator/profiles"};
+    QString steamProfiles[2] = {QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/Euro Truck Simulator 2/steam_profiles",
+                                QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/American Truck Simulator/steam_profiles"};
+    QString profiles[2] = {QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/Euro Truck Simulator 2/profiles",
+                           QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/American Truck Simulator/profiles"};
     QString selectedProfilePath; // 选择的配置文件路径
 
     QList<QPair<QString, QDateTime>> steamProfileFolders;

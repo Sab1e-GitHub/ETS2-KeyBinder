@@ -170,9 +170,10 @@ ETS2KeyBinderWizard::~ETS2KeyBinderWizard() {
 QStringList ETS2KeyBinderWizard::getDeviceNameGameList() {
     QString globalControlsFilePath;
     if (ui->comboBox_4->currentIndex() == 0) {
-        globalControlsFilePath = QDir::homePath() + "/Documents/Euro Truck Simulator 2/global_controls.sii";
+        globalControlsFilePath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/Euro Truck Simulator 2/global_controls.sii";
     } else {
-        globalControlsFilePath = QDir::homePath() + "/Documents/American Truck Simulator/global_controls.sii";
+        globalControlsFilePath =
+            QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/American Truck Simulator/global_controls.sii";
     }
 
     QFile file(globalControlsFilePath);
@@ -1081,8 +1082,8 @@ void ETS2KeyBinderWizard::showManuallyBinder(BindingType bindingType) {
     // 当manuallyBinder没关闭时，不允许操作其他窗口
     manuallyBinder->setWindowModality(Qt::ApplicationModal); // 设置窗口模式为应用程序模态
 
-    manuallyBinder->setKeyCount(DINPUT_MAX_BUTTONS);            // 设置按键数量
-    manuallyBinder->setBindingType(bindingType); // 设置绑定类型
+    manuallyBinder->setKeyCount(DINPUT_MAX_BUTTONS); // 设置按键数量
+    manuallyBinder->setBindingType(bindingType);     // 设置绑定类型
 
     // 连接信号槽
     connect(manuallyBinder, &ManuallyBinder::keyBound, this, &ETS2KeyBinderWizard::modifyControlsSii_Slot, Qt::DirectConnection);
