@@ -7,6 +7,8 @@
 #include <dinput.h>
 #include <string>
 
+#define DINPUT_MAX_BUTTONS 128 // DirectInput 最大按键数
+
 struct DiDeviceInfo {
     std::string name;
     GUID guidInstance;
