@@ -1,3 +1,6 @@
+// 参考开源项目：https://github.com/Sab1e-GitHub/ETS2-KeyBinder
+// 参考开源项目：https://github.com/InsistonTan/KeyMappingsTool
+
 #include "ets2keybinderwizard.h"
 #include "manuallybinder.h"
 #include "ui_ets2keybinderwizard.h"
@@ -10,21 +13,19 @@
 #include <map>
 #include <string>
 
-// 参考开源项目：https://github.com/Sab1e-GitHub/ETS2-KeyBinder
-// 参考开源项目：https://github.com/InsistonTan/KeyMappingsTool
+using namespace std;
 
 const QString MEG_BOX_LINE = "------------------------";
 const QString MAPPING_FILE_NAME = "LightBinder";
 const QString SCS_BTN_STR_DEFAULT = "自动绑定"; // 默认按钮文本
 
 #define POV_MAX (4 * 4)
-std::map<int, size_t> povStandMap = {{0, 0}, {90, 1}, {180, 2}, {270, 3}}; // POV方向映射
-std::map<size_t, QString> povUiMap = {{0, "0度"}, {1, "90度"}, {2, "180度"}, {3, "270度"}};
-std::map<size_t, QString> povStringMap = {{0, "pov1_up"},  {1, "pov1_right"},  {2, "pov1_down"},  {3, "pov1_left"},
-                                          {4, "pov2_up"},  {5, "pov2_right"},  {6, "pov2_down"},  {7, "pov2_left"},
-                                          {8, "pov3_up"},  {9, "pov3_right"},  {10, "pov3_down"}, {11, "pov3_left"},
-                                          {12, "pov4_up"}, {13, "pov4_right"}, {14, "pov4_down"}, {15, "pov4_left"}};
-using namespace std;
+const map<int, size_t> povStandMap = {{0, 0}, {90, 1}, {180, 2}, {270, 3}}; // POV方向映射
+const map<size_t, QString> povUiMap = {{0, "0度"}, {1, "90度"}, {2, "180度"}, {3, "270度"}};
+const map<size_t, QString> povStringMap = {{0, "pov1_up"},  {1, "pov1_right"},  {2, "pov1_down"},  {3, "pov1_left"},
+                                           {4, "pov2_up"},  {5, "pov2_right"},  {6, "pov2_down"},  {7, "pov2_left"},
+                                           {8, "pov3_up"},  {9, "pov3_right"},  {10, "pov3_down"}, {11, "pov3_left"},
+                                           {12, "pov4_up"}, {13, "pov4_right"}, {14, "pov4_down"}, {15, "pov4_left"}};
 
 map<BindingType, QString> scsBtnStrMap = {
     {BindingType::lightoff, SCS_BTN_STR_DEFAULT},    {BindingType::lighthorn, SCS_BTN_STR_DEFAULT},   {BindingType::wipers0, SCS_BTN_STR_DEFAULT},
@@ -159,7 +160,7 @@ ETS2KeyBinderWizard::ETS2KeyBinderWizard(QWidget* parent) : QWizard(parent), ui(
                         for (size_t i = capabilities.dwButtons; i < capabilities.dwButtons + POV_MAX; i++) {
                             size_t povIndex = i - capabilities.dwButtons;
                             if (keyState.getBit(i)) {
-                                povState += povUiMap[povIndex % 4] + ",";
+                                povState += povUiMap.at(povIndex % 4) + ",";
                             }
                         }
                         povState.chop(1);                    // 去掉最后一个逗号
@@ -322,7 +323,7 @@ void ETS2KeyBinderWizard::modifyControlsSii(const QString& controlsFilePath, Bin
     }
 
     // 替换规则字典
-    map<BindingType, QString> replaceRules = {
+    const map<BindingType, QString> replaceRules = {
         {BindingType::lightoff, R"(mix lightoff `.*?semantical\.lightoff\?0`)"},
         {BindingType::lighthorn, R"(mix lighthorn `.*?semantical\.lighthorn\?0`)"},
         {BindingType::wipers0, R"(mix wipers0 `.*?semantical\.wipers0\?0`)"},
@@ -341,7 +342,7 @@ void ETS2KeyBinderWizard::modifyControlsSii(const QString& controlsFilePath, Bin
         {BindingType::gearsel2on, R"(mix gearsel2on `.*?semantical\.gearsel2on\?0`)"},
     };
 
-    map<BindingType, QString> bindingTypeString = {
+    const map<BindingType, QString> bindingTypeString = {
         {BindingType::lightoff, "lightoff"},       {BindingType::lighthorn, "lighthorn"},   {BindingType::wipers0, "wipers0"},
         {BindingType::wipers1, "wipers1"},         {BindingType::wipers2, "wipers2"},       {BindingType::wipers3, "wipers3"},
         {BindingType::wipers4, "wipers4"},         {BindingType::lightpark, "lightpark"},   {BindingType::lighton, "lighton"},
@@ -356,8 +357,8 @@ void ETS2KeyBinderWizard::modifyControlsSii(const QString& controlsFilePath, Bin
     }
 
     // 获取替换规则
-    QString pattern = replaceRules[bindingType];
-    QString replacement = QString("mix %1 `%2 | semantical.%1?0`").arg(bindingTypeString[bindingType], ets2BtnStr);
+    QString pattern = replaceRules.at(bindingType);
+    QString replacement = QString("mix %1 `%2 | semantical.%1?0`").arg(bindingTypeString.at(bindingType), ets2BtnStr);
 
     QTextStream in(&controlsFile);
     QStringList lines;
@@ -417,7 +418,7 @@ QString convertToETS2_String(const QString& gameJoyPosStr, const ActionEffect& a
             ets2BtnStr += gameJoyStr + ".b" + QString::number(item.first + 1) + "?0 & ";
         } else if (item.first < maxButtonCount + POV_MAX) { // POV
             size_t povIndex = item.first - maxButtonCount;
-            ets2BtnStr += gameJoyStr + "." + povStringMap[povIndex] + "?0 & ";
+            ets2BtnStr += gameJoyStr + "." + povStringMap.at(povIndex) + "?0 & ";
         }
     }
     ets2BtnStr.chop(3); // 去掉最后的 &
@@ -1125,7 +1126,7 @@ BigKey ETS2KeyBinderWizard::getKeyState() {
                     }
                     val /= 10;
                 }
-                keyState.setBit(povStandMap[val] + capabilities.dwButtons + i * 4, true);
+                keyState.setBit(povStandMap.at(val) + capabilities.dwButtons + i * 4, true);
             }
         }
     } else {
