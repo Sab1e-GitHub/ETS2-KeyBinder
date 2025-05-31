@@ -20,8 +20,8 @@ ManuallyBinder::~ManuallyBinder() {
 
 // 设置按键数量
 void ManuallyBinder::setKeyCount(size_t count) {
-    if (count < 1 || count > 128) {
-        count = 128; // 最大支持128个按键
+    if (count < 1 || count > DINPUT_MAX_BUTTONS) {
+        count = DINPUT_MAX_BUTTONS; // 最大支持DINPUT_MAX_BUTTONS个按键
     }
     keyCount = count; // 按键数量
 
@@ -84,6 +84,10 @@ void ManuallyBinder::on_pushButton_clicked() {
 }
 
 void ManuallyBinder::on_pushButton_3_clicked() {
+    if (ui->lineEdit->text().isEmpty()) {
+        QMessageBox::critical(this, "错误", "请输入按键！");
+        return;
+    }
     QMessageBox box(QMessageBox::Information, "提示", "是否绑定？");
     box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     box.setDefaultButton(QMessageBox::Yes);
