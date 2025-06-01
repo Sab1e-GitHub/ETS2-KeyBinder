@@ -80,8 +80,6 @@ private slots:
 
     void on_comboBox_2_activated(int index);
 
-    void on_checkBox_3_clicked(bool checked);
-
     void on_pushButton_16_clicked();
 
     void on_pushButton_5_clicked();

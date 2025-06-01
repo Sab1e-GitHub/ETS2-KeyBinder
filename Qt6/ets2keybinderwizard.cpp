@@ -776,8 +776,8 @@ void ETS2KeyBinderWizard::multiKeyBind(std::map<BindingType, ActionEffect> actio
 
 std::vector<BigKey> ETS2KeyBinderWizard::getMultiKeyState(const QString& title, const QStringList& messages) {
     if (checkHardwareDeviceAndMsgBox() == false) {
-        ui->checkBox_3->setChecked(true);
-        on_checkBox_3_clicked(true);
+        // 禁用组合键绑定按钮
+        // ...
         return {}; // 设备未连接，取消操作
     }
 
@@ -1189,10 +1189,6 @@ void ETS2KeyBinderWizard::on_comboBox_3_activated(int index) {
 
 void ETS2KeyBinderWizard::on_comboBox_2_activated(int index) {
     gameDeviceName = ui->comboBox_2->currentText().toStdString();
-}
-
-void ETS2KeyBinderWizard::on_checkBox_3_clicked(bool checked) {
-    ui->stackedWidget->setCurrentIndex(checked);
 }
 
 void ETS2KeyBinderWizard::showManuallyBinder(BindingType bindingType) {
