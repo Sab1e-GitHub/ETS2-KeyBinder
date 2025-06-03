@@ -250,6 +250,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="toolTip">
+          <string>要绑定的设备</string>
+         </property>
          <item>
           <property name="text">
            <string>TEST1</string>
@@ -267,12 +270,15 @@
        <item row="2" column="0">
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>游戏输入设备</string>
+          <string>游戏输入类型</string>
          </property>
         </widget>
        </item>
        <item row="2" column="1">
         <widget class="QComboBox" name="comboBox_2">
+         <property name="toolTip">
+          <string>与游戏内对应顺序一致即可</string>
+         </property>
          <item>
           <property name="text">
            <string>joy</string>
@@ -308,7 +314,11 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QComboBox" name="comboBox_3"/>
+        <widget class="QComboBox" name="comboBox_3">
+         <property name="toolTip">
+          <string>要修改的游戏配置文件</string>
+         </property>
+        </widget>
        </item>
        <item row="0" column="2" rowspan="3">
         <widget class="QWidget" name="widget_4" native="true">
