@@ -9,6 +9,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    bracketrightwidget.cpp \
     ets2keybinderwizard.cpp \
     global.cpp \
     main.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
 
 
 HEADERS += \
+    bracketrightwidget.h \
     device_info.h \
     ets2keybinderwizard.h \
     global.h \
